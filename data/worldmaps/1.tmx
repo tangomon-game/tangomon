@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="60" tilewidth="16" tileheight="16" nextobjectid="179">
+ <properties>
+  <property name="music" value="overworld.ogg"/>
+ </properties>
+ <tileset firstgid="1" source="../tilesets/basictiles.tsx"/>
+ <tileset firstgid="121" source="../tilesets/objects.tsx"/>
+ <layer name="Ground" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt1DkSwCAMQ1FukDL3v2naNJlxkDfgF2rFg8G+xxg3kXNNprsvy/j3nO6+t3FFX/V/+PJ1+sOr+brtAE9fhLHSZ+mo8ll7uvqicoov6l47+JQefPh29qk9J/vUHtWGD1+lz2t28a3pU/czPnz4YnwWm+LLeDt8Ob6q2cCHD5/PfvHOLu9nOavaN5PuPtWY4Zu5T7UB37k+kpMH5ueyqQ==
+  </data>
+ </layer>
+ <layer name="Roads" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20Hb6AAAAAAAAAAAAB4DCWAAAE=
+  </data>
+ </layer>
+ <layer name="Decorations" width="40" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztmU1OAzEMhecIbFiUERKlG6BH4P73ohFEsqw39rPzQ6h4UiRKG+cbx3GcybZ96yPZZuhyaw/J9j6JD+mR6FsYzx1ZkCTfJ9lHss/iO93aE9H2n9/XZ0F8PWO28kX8sIu/Zb8y/nXzYzbCXPheg3wyJs7if5XBEmLuHSOI79pgbzRf9Z2lF+O73nkK8SExOaooOsfe2ruIsS0+pCNmls9af3UeWP+x+ZTl8+KoMsq1oD9nxfJ50jmEySmMonxsbLdKxrGnSJxrebH27HzP8DFxhPbp3eyBpZ/H49Nr48gfyE5r/juyy4yhx4nwRdTC59m5Fz5rDXl81tqQdnv5T8emxafXhhXXLF80f1p8kf0J2Rm5v3l7rjcPTO2nheLQ4osI8Wm9BW0iu5b9IjY/98gtyC6yzzx3ho9ZKzPnNyOWDz2rtb8x/bV07JyM33rP79UZo/e26PsXlg/ZypyNVog/b++N1Je9+GQ9nald2LmYUbtE1gjD17M2OBqDtTW6tvLG8GxZtQvrx1H+y9QuWlZuluNIsbE8I7dEx2nli5570Thsfb+a/3SsrMBn5Xkrbr066MgmUvbsu4L/LFsr8Mk50Xcr3rkyU68hsX5A76Rb1Tu/WMr0a/EfOie0vpfUYu8VmLF+o3aR8u5WtWbde7SodY5H8xUx99o6Zmssr6bMffhM/QW+6H39v+5TX7A+MHo=
+  </data>
+ </layer>
+ <objectgroup color="#ffff00" name="forest">
+  <object id="172" x="208" y="464" width="432" height="496">
+   <properties>
+    <property name="level" value="4"/>
+   </properties>
+  </object>
+  <object id="173" x="0" y="544" width="208" height="416">
+   <properties>
+    <property name="level" value="4"/>
+   </properties>
+  </object>
+  <object id="174" x="0" y="0" width="208" height="544">
+   <properties>
+    <property name="level" value="5"/>
+   </properties>
+  </object>
+  <object id="175" x="208" y="0" width="432" height="464">
+   <properties>
+    <property name="level" value="5"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup name="dungeon"/>
+ <objectgroup color="#55ff00" name="safe_zone"/>
+ <objectgroup color="#5555ff" name="door">
+  <object id="177" x="480" y="896" width="16" height="16">
+   <properties>
+    <property name="dest" value="0.tmx"/>
+   </properties>
+  </object>
+  <object id="178" x="32" y="96" width="16" height="16">
+   <properties>
+    <property name="dest" value="3.tmx"/>
+   </properties>
+  </object>
+ </objectgroup>
+ <objectgroup color="#000000" name="solid">
+  <object id="133" x="432" y="128" width="16" height="16"/>
+  <object id="134" x="352" y="400" width="16" height="16"/>
+  <object id="135" x="64" y="432" width="16" height="16"/>
+  <object id="136" x="208" y="256" width="96" height="144"/>
+  <object id="137" x="208" y="400" width="80" height="224"/>
+  <object id="138" x="192" y="672" width="80" height="96"/>
+  <object id="139" x="208" y="624" width="64" height="48"/>
+  <object id="140" x="192" y="784" width="80" height="48"/>
+  <object id="141" x="288" y="848" width="192" height="112"/>
+  <object id="142" x="480" y="912" width="16" height="48"/>
+  <object id="143" x="496" y="848" width="144" height="112"/>
+  <object id="144" x="528" y="608" width="112" height="240"/>
+  <object id="145" x="544" y="464" width="96" height="144"/>
+  <object id="146" x="560" y="160" width="80" height="304"/>
+  <object id="147" x="544" y="0" width="96" height="160"/>
+  <object id="148" x="464" y="0" width="80" height="112"/>
+  <object id="149" x="352" y="0" width="112" height="96"/>
+  <object id="150" x="272" y="0" width="32" height="224"/>
+  <object id="151" x="304" y="0" width="48" height="112"/>
+  <object id="152" x="304" y="112" width="16" height="32"/>
+  <object id="153" x="256" y="0" width="16" height="48"/>
+  <object id="155" x="0" y="0" width="256" height="32"/>
+  <object id="157" x="0" y="32" width="32" height="928"/>
+  <object id="158" x="48" y="64" width="176" height="48"/>
+  <object id="159" x="224" y="80" width="16" height="144"/>
+  <object id="160" x="208" y="112" width="16" height="112"/>
+  <object id="161" x="192" y="112" width="16" height="96"/>
+  <object id="162" x="32" y="112" width="160" height="80"/>
+  <object id="163" x="32" y="192" width="64" height="16"/>
+  <object id="164" x="32" y="208" width="48" height="80"/>
+  <object id="165" x="32" y="288" width="32" height="80"/>
+  <object id="166" x="32" y="368" width="16" height="32"/>
+  <object id="167" x="32" y="528" width="16" height="432"/>
+  <object id="168" x="48" y="800" width="16" height="160"/>
+  <object id="169" x="64" y="816" width="128" height="144"/>
+  <object id="170" x="192" y="832" width="96" height="128"/>
+ </objectgroup>
+ <objectgroup name="Objects">
+  <object id="176" gid="121" x="480" y="832" width="16" height="16"/>
+ </objectgroup>
+</map>

@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="30" tilewidth="16" tileheight="16" nextobjectid="133">
+ <properties>
+  <property name="music" value="overworld.ogg"/>
+ </properties>
+ <tileset firstgid="1" source="../tilesets/basictiles.tsx"/>
+ <tileset firstgid="121" source="../tilesets/objects.tsx"/>
+ <layer name="Ground" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztw0ENAAAMA6ETUP96Z2MPSFg1VVVVVX36APohOEE=
+  </data>
+ </layer>
+ <layer name="Roads" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
+  </data>
+ </layer>
+ <layer name="Decorations" width="40" height="30">
+  <data encoding="base64" compression="zlib">
+   eJztwTEBAAAAwqD1T20ND6AAAAAA4NcAEsAAAQ==
+  </data>
+ </layer>
+ <objectgroup color="#ffff00" name="forest"/>
+ <objectgroup color="#ff0000" name="dungeon"/>
+ <objectgroup color="#55ff00" name="safe_zone"/>
+ <objectgroup color="#5555ff" name="door"/>
+ <objectgroup color="#000000" name="solid"/>
+ <objectgroup name="Objects"/>
+</map>

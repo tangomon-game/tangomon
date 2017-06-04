@@ -1,0 +1,80 @@
+[
+    {
+        "lines": [
+            "<insert website here>"
+        ]
+    },
+    {
+        "title": "Design",
+        "lines": [
+            "Julie Marchant"
+        ]
+    },
+    {
+        "title": "Programming",
+        "lines": [
+            "Julie Marchant"
+        ]
+    },
+    {
+        "title": "Graphics",
+        "lines": [
+            "Stephen \"Redshrike\" Challener",
+            "Sharm",
+            "Blarumyrran",
+            "5hiroi",
+            "Heather Lee Harvey",
+            "LordNeo",
+            "MrBeast",
+            "surt",
+            "Zabin"
+        ]
+    },
+    {
+        "title": "Sounds",
+        "lines": [
+            "Julie Marchant",
+            "NenadSimic",
+            "MatzeB"
+        ]
+    },
+    {
+        "title": "Music",
+        "lines": [
+            "SketchyLogic"
+        ]
+    },
+    {
+        "title": "Translations",
+        "lines": [
+        ]
+    },
+    {
+        "title": "Software Used",
+        "lines": [
+            "Python",
+            "SGE Game Engine",
+            "xSGE",
+            "Tiled",
+            "GIMP",
+            "KolourPaint",
+            "Sfxr"
+        ]
+    },
+    {
+        "title": " "
+    },
+    {
+        "lines": [
+            "This game is both libre software and libre culture. The Python source code is under the GNU GPL version 3 or later, and other portions are under either the GNU GPL, CC BY, CC BY-SA, or CC0. See data/LICENSES for more details.",
+            " ",
+            "Copying is not theft. On the contrary, copying is an act of love. If you enjoyed this game, please copy and share."
+        ]
+    },
+    {
+        "title": " "
+    },
+    {
+        "title": "Thank you for playing!"
+    }
+]

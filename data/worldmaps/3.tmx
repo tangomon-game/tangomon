@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="16" tileheight="16" nextobjectid="134">
+ <properties>
+  <property name="music" value="overworld.ogg"/>
+ </properties>
+ <tileset firstgid="1" source="../tilesets/basictiles.tsx"/>
+ <tileset firstgid="121" source="../tilesets/objects.tsx"/>
+ <layer name="Ground" width="120" height="60">
+  <data encoding="base64" compression="zlib">
+   eJztnVuOwyAMRbuAyaLC/hc18zFIlmWehYDJ+ThqqhBq52IDedDw+XyuP342ICS2U9yZeu7M/tm2aztaz+/1f+wl/Ii+3KLOGv9qygT1ae1P/d6tyml/gzi+5Ry0aJeyK+XPpbavz9gYCAPrjG1hpG1am1F11+jUEw89Prb4FQS6LZV0LPkS99fGoWVD77luPSbGeBDftX8yt96izJPtaBUzc1iuDlmPtqGlfZV4g4YtusXPp9q3pfVIfaGNnnjXx0RNc+3nLflzJ6QmteOFVF+42hcoozV+en4IY5Fz5NW2wBx947bWuSZX05+eh87fq+2BeaCvf8jBZ2DpyJz1HFrnQoy5z0PGM33vmXDNwzepvEs/7BetnXUPAX39YsWs9XzMajuhj9TcaLVdMA/GUGdRilfu8wLsjfXcZm4/+INx8rtBf7/k3tUplYE9aY1H4tcnNe+/oK1fcnkXXc+Caxnv5In3LmGedjXlyNUA+1Lqe8nPAHtT6osZW/umNIZCX1/UPF8H74J5km9q1vUCH6Sef7X6WfT1ibWOWGkcRY4+G2IZ4Bl6Y83K0eTlc9D6sp7SGqy1jbQ23153Qtc99E3xTV7lHcK1WPf15HXG3tglZvdArxc/q25Yr29vHk2t8Yu+e7BqTX2Yi+xja2O3NiYZU61Hjq169ZDHzezLoQ/rPy201iPaAfgkFafE79mg7/n8AsRYdWs=
+  </data>
+ </layer>
+ <layer name="Roads" width="120" height="60">
+  <data encoding="base64" compression="zlib">
+   eJzt0TEKgEAMRNH0Xs8b2O1W3r+xsBdWCGHDezD9h4kAAAAAAAAAWHNVB5BqVgcAAAAAAAAAAAAAAAAAAAAA/HBUB5DKv32d4d+d3fH+97VRVgcAAD09Zo0Cdw==
+  </data>
+ </layer>
+ <layer name="Decorations" width="120" height="60">
+  <data encoding="base64" compression="zlib">
+   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
+  </data>
+ </layer>
+ <objectgroup color="#ffff00" name="forest"/>
+ <objectgroup name="dungeon"/>
+ <objectgroup color="#55ff00" name="safe_zone"/>
+ <objectgroup color="#5555ff" name="door"/>
+ <objectgroup color="#000000" name="solid"/>
+ <objectgroup name="Objects">
+  <object id="133" gid="121" x="1776" y="832" width="16" height="16"/>
+ </objectgroup>
+</map>

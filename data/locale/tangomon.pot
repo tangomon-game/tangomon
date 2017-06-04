@@ -1,0 +1,353 @@
+# Tangomon Translateable Text
+# Copyright (C) 2017 Julie Marchant <onpon4@riseup.net>
+#
+# This program is free software: you can redistribute it and/or modify
+# it under the terms of the GNU General Public License as published by
+# the Free Software Foundation, either version 3 of the License, or
+# (at your option) any later version.
+#
+# This program is distributed in the hope that it will be useful,
+# but WITHOUT ANY WARRANTY; without even the implied warranty of
+# MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+# GNU General Public License for more details.
+#
+# You should have received a copy of the GNU General Public License
+# along with this program.  If not, see <http://www.gnu.org/licenses/>.
+
+# FIRST AUTHOR <EMAIL@ADDRESS>, YEAR.
+#
+#, fuzzy
+msgid ""
+msgstr ""
+"Project-Id-Version: 0.1\n"
+"Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
+"POT-Creation-Date: 2017-05-31 10:32-0400\n"
+"PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
+"Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
+"Language-Team: LANGUAGE <LL@li.org>\n"
+"Language: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=CHARSET\n"
+"Content-Transfer-Encoding: 8bit\n"
+
+# Explanation for the "-v" command-line option
+msgid "Output version information and exit."
+msgstr ""
+
+# Explanation for the "-l" command-line option
+msgid "Manually choose a different language to use."
+msgstr ""
+
+# Explanation for the "--nodelta" command-line option
+msgid ""
+"Disable delta timing. Causes the game to slow down when it can't run at full "
+"speed instead of becoming choppier."
+msgstr ""
+
+# Explanation for the "-d" command-line option
+msgid "Where to load the game data from (Default: \"{}\")"
+msgstr ""
+
+# Character selection screen instructions
+msgid ""
+"Please use the left and right arrow keys to select your character. When you "
+"are finished, press the Enter key."
+msgstr ""
+
+# Shown when the player passes a loyalty test given by their own
+# tangomon. {tangomon} is replaced with the name of the tangomon.
+msgid "You passed the test given to you by {tangomon}!"
+msgstr ""
+
+# Shown when the player fails a loyalty test given by their own
+# tangomon. {tangomon} is replaced with the name of the tangomon, and
+# {tangoji} is replaced with the tangoji the player was supposed to enter.
+msgid ""
+"You failed the test given to you by {tangomon}! {tangomon} loses faith in "
+"you and \"{tangoji}\" is transformed back into a tangoji!"
+msgstr ""
+
+# Shown when the player's tangomon successfully attacks. {player} is
+# replaced with the name of the player's tangomon, {tangoji} is replaced
+# with the tangoji used to attack, and {damage} is replaced with the
+# amount of damage inflicted.
+msgid "{player} attacks with \"{tangoji}\", inflicting {damage} damage!"
+msgstr ""
+
+# Shown when the player's tangomon fails to attack due to an incorrect
+# tangoji entry. {tangoji} is replaced with the tangoji the player was
+# supposed to enter.
+msgid "Attack failed! Correct Tangoji (\"{tangoji}\") not entered."
+msgstr ""
+
+# Shown when the player's tangomon successfully defends, but the defense
+# is not strong enough to block the attack completely (usually caused by
+# fighting a stronger tangomon or using an old tangoji). {tangoji} is
+# replaced with the tangoji used to defend, {enemy} is replaced with the
+# name of the enemy tangomon, {damage} is replaced with the damage
+# inflicted, and {defense} is replaced with the reduction in damaged
+# caused by the successful defense.
+msgid ""
+"Defense with \"{tangoji}\" succeeded! Damage from {enemy} attack is only "
+"{damage} (reduced by {defense})."
+msgstr ""
+
+# Shown when the player's tangomon successfully defends and the defense
+# completely blocks the enemy attack. {tangoji} is replaced with the
+# tangoji used to defend and {enemy} is replaced with the name of the
+# enemy tangomon.
+msgid "Defense with \"{tangoji}\" succeeded! {enemy} attack blocked."
+msgstr ""
+
+# Shown when the player's tangomon fails to defend due to an incorrect
+# tangoji entry. {tangoji} is replaced with the tangoji the player was
+# supposed to enter, {enemy} is replaced with the name of the enemy
+# tangomon, and {damage} is replced with the damage inflicted.
+msgid ""
+"Defense failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} "
+"attacks, inflicting {damage} damage."
+msgstr ""
+
+# Shown when a tangokan is used successfully. {tangomon} is replaced
+# with the name of the new tangomon.
+msgid "Impression succeeded! {tangomon} has joined your team!"
+msgstr ""
+
+# Shown when use of a tangokan fails. {tangomon} is replaced with the
+# name of the tangomon the player was trying to use the tangokan on.
+msgid ""
+"Impression failed! {tangomon} runs away, unimpressed, and your tangokan "
+"turns back into a tangoji!"
+msgstr ""
+
+# Used any time a tangomon is running away from the battle. Used for
+# both the player's tangomon and the enemy tangomon.
+msgid "{tangomon} is running away!"
+msgstr ""
+
+# Asks for confirmation when the player attempts to leave the battle.
+# Very important since leaving the battle early will result in your
+# current tangomon running away, no exceptions.
+msgid ""
+"WARNING: If you leave this battle, you will lose your current tangomon! Are "
+"you sure?"
+msgstr ""
+
+# Shown in "yes/no" dialog boxes
+msgid "No"
+msgstr ""
+
+# Shown in "yes/no" dialog boxes
+msgid "Yes"
+msgstr ""
+
+# Message box asking the player if they want to use a tangokan on the
+# enemy tangomon. {tangomon} is replaced with the name of this enemy
+# enemy tangomon.
+msgid "Do you want to impress the {tangomon} with one of your tangokans?"
+msgstr ""
+
+# Message box asking the player if they want to "learn" (add) a new
+# tangoji. {tangomon} is replaced with the name of the enemy tangomon
+# which offers to "teach" it.
+msgid "The {tangomon} offers to teach you a new tangoji. Accept the offer?"
+msgstr ""
+
+# Shown when a new tangoji is added.
+msgid "New tangoji added!"
+msgstr ""
+
+# Shown when the player attempts to make a tangokan when they have too
+# few tangojis to do so. {minimum} is replaced by the minimum number of
+# tangojis the player must have at all time (i.e. they must have more
+# than this number in order to make one into a tangokan).
+msgid ""
+"You don't have enough tangojis in reserve to make a tangokan. You can only "
+"create a tangokan if, after spending one of your tangojis to make the "
+"tangokan, you have at least {minimum} left over. Fight some tangomon to get "
+"more tangojis!"
+msgstr ""
+
+# Default text use for the test textbox. Should ideally be a phrase that
+# incorporates most kinds of characters the current language uses (e.g.
+# if accents are used, make sure to include some words with those
+# accents). The player can of course type their own text, so exactly
+# what is in here is not terribly important.
+msgid "The quick brown fox jumps over the lazy dog."
+msgstr ""
+
+# The button pressed to close the font selection window.
+msgid "Done"
+msgstr ""
+
+# The button pressed to change the current font to the one typed into
+# the font textbox.
+msgid "Change Font"
+msgstr ""
+
+# Text explaining the font dialog. Note: this dialog is shown on first
+# run as well as any time the "Select Font" option in the Options menu
+# is chosen.
+msgid ""
+"If you will be using non-ASCII characters, please ensure that they display "
+"correctly by typing them into the test textbox above. If they do not, please "
+"specify a different font to use by entering its name in the textbox below "
+"and then clicking \"Change Font\". When you are finished, press \"Done\"."
+msgstr ""
+
+# Main menu item (Starts a new game)
+msgid "New Game"
+msgstr ""
+
+# Main menu item (Loads a previous game)
+msgid "Load Game"
+msgstr ""
+
+# Main menu item (opens Options menu)
+msgid "Options"
+msgstr ""
+
+# Main menu item (shows credits)
+msgid "Credits"
+msgstr ""
+
+# Main menu item (opens https://www.patreon.com/onpon4)
+msgid "Support on Patreon"
+msgstr ""
+
+# Main menu item (Quits the game)
+msgid "Quit"
+msgstr ""
+
+# Used for empty save slots in the New Game and Load Game menus.
+msgid "-Empty-"
+msgstr ""
+
+# Used in several menus to go back to the previous menu.
+msgid "Back"
+msgstr ""
+
+# Option to overwrite an existing save file when starting a new game.
+# This is a confirmation menu to make sure that doesn't happen
+# accidentally.
+msgid "Overwrite this save file"
+msgstr ""
+
+# Replaces {} on binary options which are currently enabled.
+msgid "On"
+msgstr ""
+
+# Replaces {} on binary options which are currently disabled.
+msgid "Off"
+msgstr ""
+
+# Fullscreen option (binary option)
+msgid "Fullscreen: {}"
+msgstr ""
+
+# Scale method option. {} is replaced with the name of the current
+# scale method.
+msgid "Scale Method: {}"
+msgstr ""
+
+# Sound option (binary option)
+msgid "Sound: {}"
+msgstr ""
+
+# Music option (binary option)
+msgid "Music: {}"
+msgstr ""
+
+# Show FPS option (binary option)
+msgid "Show FPS: {}"
+msgstr ""
+
+# Opens the font selection dialog
+msgid "Select Font"
+msgstr ""
+
+# Pause menu option: closes the menu and continues the game
+msgid "Continue Game"
+msgstr ""
+
+# Pause menu option: shows current player statistics
+msgid "View Statistics"
+msgstr ""
+
+# Pause menu option: Shows current tangomon
+msgid "View Tangomon"
+msgstr ""
+
+# Pause menu option: Shows current tangoji
+msgid "View Tangoji"
+msgstr ""
+
+# Pause menu option: Ends the game and returns to the title screen
+msgid "Return to Title Screen"
+msgstr ""
+
+# Shows player statistics. Everything in brackets is replaced by the
+# corresponding statistic.
+msgid ""
+"PLAYER STATISTICS\n"
+"\n"
+"Name: {name}\n"
+"Total tangomon: {tangomon}\n"
+"Tangomon types: {unique_tangomon}\n"
+"Active tangoji: {tangoji}\n"
+"Active tangokans: {tangokans}\n"
+"Inactive tangokans: {inactive_tangokans}\n"
+"Completion: {completion}%"
+msgstr ""
+
+# Menu option: Show the next page in a multi-page menu
+msgid "Next page"
+msgstr ""
+
+# Shown when a new tangokan is created.
+msgid ""
+"New tangokan created! It will activate in 24 hours. At that point, you will "
+"be able to use your tangokan to convince a new tangomon to join your team!"
+msgstr ""
+
+# Tangomon info. {hp} is replaced by the tangomon's max HP, {power} is
+# replaced by the tangomon's base power.
+msgid ""
+"HP: {hp}\n"
+"Power: {power}"
+msgstr ""
+
+# Dialog box asking the player to enter a new tangoji.
+msgid "Enter your new tangoji."
+msgstr ""
+
+# Dialog box asking the player to enter the clue for the previously
+# entered tangoji.
+msgid "Enter the clue for your new tangoji."
+msgstr ""
+
+# Dialog box asking for the player's name.
+msgid "What is your name?"
+msgstr ""
+
+# Shown when the player tries to cancel out of the tangoji creation at
+# the beginning. The player is not allowed to continue until three
+# tangoji are entered.
+msgid "You must add a tangoji to continue."
+msgstr ""
+
+
+# Series of messages printed to the terminal as the game is being
+# initialized.
+
+msgid "Initializing game system..."
+msgstr ""
+
+msgid "Initializing GUI system..."
+msgstr ""
+
+msgid "Loading media..."
+msgstr ""
+
+msgid "Starting game..."
+msgstr ""
