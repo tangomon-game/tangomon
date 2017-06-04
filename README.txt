@@ -34,9 +34,36 @@ terminal with the "-h" command-line option for more information.
 
 HOW TO PLAY
 
-Use the directional controls and pause or jump key to navigate the
-menus. By default, Anneroy is controlled by the arrow keys, Space, Left
-Ctrl, and Left Shift. You can change the controls in the Options menu.
+Use the arrow keys to move and the Enter key to select, or to open the
+pause menu.
+
+The game is simple: You start with one "tangomon" and three "tangojis".
+Tangojis are what you use to attack; they are words you need to
+memorize. Your tangojis can be whatever you want them to be, but the
+idea is for them to be things you are trying to learn, such as
+vocabulary words. Tangomon are the creatures which battle using
+tangojis. You can find them by exploring the map, but not while you are
+on a road or in a town.
+
+When you defeat a tangomon, that tangomon will offer to teach you a new
+tangoji. Again, you choose your tangojis if you accept their offer.
+Tangojis degrade in effectiveness over time, so it is in your best
+interest to learn new tangojis as much as possible.
+
+When you have learned a tangoji, you can convert it to a "tangokan".
+Tangokans are used to convince other tangomon to join your team. At the
+end of a battle, if you have any active tangokans, you will be given the
+opportunity to use one. You will have to correctly give the tangoji used
+to create the tangokan used. If you fail, the tangokan will revert back
+into a tangoji.
+
+After using a tangokan, your tangomon will test your memory of it
+several times over the course of the next several months, so make sure
+you really know every tangoji you convert into a tangokan! Any failure
+to pass your tangomon's test will result in that tangomon abandoning
+you.
+
+That's it! See if you can collect all types of tangomon!
 
 If, after entering fullscreen mode, the keyboard becomes unresponsive,
 you can exit the game by pressing the middle mouse button. This is a
