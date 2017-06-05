@@ -112,7 +112,7 @@ BASE_POWER_START = 10
 INCREMENT_FACTOR = 1.1
 
 ATTACK_INTERVAL_TIME = 3 * FPS
-TANGOJI_ENTRY_TIME = 60 * FPS
+TANGOJI_ENTRY_TIME = 30 * FPS
 TANGOJI_MULT_START = 1.25
 TANGOJI_MULT_DECREMENT = 0.025
 TANGOJI_MULT_MIN = 0.25
@@ -132,7 +132,7 @@ HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 MONTH = 30 * DAY
 TANGOKAN_WAIT_TIME = DAY
-TANGOJECT_TIMES = [2 * DAY, 7 * DAY, 21 * DAY, 2 * MONTH]
+TANGOJECT_TIMES = [2 * DAY, 7 * DAY, 21 * DAY, 2 * MONTH, 6 * MONTH, 18 * MONTH]
 
 first_run = True
 
@@ -545,7 +545,9 @@ class Arena(Room):
                 self.end_battle()
 
     def event_alarm(self, alarm_id):
-        if alarm_id == "init_tangoject":
+        if alarm_id == "time_limit":
+            evaluate_tangoji()
+        elif alarm_id == "init_tangoject":
             self.show_clue()
             self.callback = self.tangoject
             self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
@@ -829,7 +831,10 @@ class Door(sge.dsp.Object):
         self.dest = dest
         self.spawn_id = spawn_id
         if dest and not spawn_id:
-            self.spawn_id = dest
+            if ':' in dest:
+                self.spawn_id, i = dest.split(':', 1)
+            else:
+                self.spawn_id = dest
 
         kwargs.setdefault("visible", False)
         kwargs.setdefault("checks_collisions", False)
