@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="60" tilewidth="16" tileheight="16" nextobjectid="179">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="60" tilewidth="16" tileheight="16" nextobjectid="182">
  <properties>
   <property name="music" value="overworld.ogg"/>
  </properties>
@@ -43,7 +43,11 @@
   </object>
  </objectgroup>
  <objectgroup name="dungeon"/>
- <objectgroup color="#55ff00" name="safe_zone"/>
+ <objectgroup color="#55ff00" name="safe_zone">
+  <object id="179" x="480" y="848" width="16" height="64"/>
+  <object id="180" x="192" y="768" width="80" height="16"/>
+  <object id="181" x="32" y="64" width="16" height="48"/>
+ </objectgroup>
  <objectgroup color="#5555ff" name="door">
   <object id="177" x="480" y="896" width="16" height="16">
    <properties>
