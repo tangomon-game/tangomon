@@ -209,6 +209,8 @@ class Room(sge.dsp.Room):
 
     """Base room class"""
 
+    fname = None
+
     def __init__(self, music=None, **kwargs):
         self.music = music
         super(Room, self).__init__(**kwargs)
@@ -546,7 +548,7 @@ class Arena(Room):
 
     def event_alarm(self, alarm_id):
         if alarm_id == "time_limit":
-            evaluate_tangoji()
+            self.evaluate_tangoji()
         elif alarm_id == "init_tangoject":
             self.show_clue()
             self.callback = self.tangoject
@@ -787,7 +789,7 @@ class Player(Object, xsge_physics.Collider):
             player_map, player_dest = dest.split(':', 1)
         else:
             player_map = dest
-            player_dest = None
+            player_dest = sge.game.current_room.fname
 
         player_x = None
         player_y = None
@@ -1670,6 +1672,7 @@ def load_map():
 
     room = xsge_tmx.load(os.path.join(DATA, "worldmaps", player_map),
                          cls=Worldmap, types=TYPES)
+    room.fname = player_map
     room.start()
 
 
