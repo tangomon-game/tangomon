@@ -31,32 +31,32 @@ msgstr ""
 
 # Explanation for the "-v" command-line option
 msgid "Output version information and exit."
-msgstr ""
+msgstr "ゲームの版とプリントします。"
 
 # Explanation for the "-l" command-line option
 msgid "Manually choose a different language to use."
-msgstr ""
+msgstr "違った国語を選びます。"
 
 # Explanation for the "--nodelta" command-line option
 msgid ""
 "Disable delta timing. Causes the game to slow down when it can't run at full "
 "speed instead of becoming choppier."
-msgstr ""
+msgstr "デルタタイミングしません。"
 
 # Explanation for the "-d" command-line option
 msgid "Where to load the game data from (Default: \"{}\")"
-msgstr ""
+msgstr "データーのディレクトリ。（既定は、「{}」）"
 
 # Character selection screen instructions
 msgid ""
 "Please use the left and right arrow keys to select your character. When you "
 "are finished, press the Enter key."
-msgstr ""
+msgstr "右と左の矢印キーを使って人物を選んでください。その後、エンターキーを押してください。"
 
 # Shown when the player passes a loyalty test given by their own
 # tangomon. {tangomon} is replaced with the name of the tangomon.
 msgid "You passed the test given to you by {tangomon}!"
-msgstr ""
+msgstr "{tangomon}のテストを合格した！"
 
 # Shown when the player fails a loyalty test given by their own
 # tangomon. {tangomon} is replaced with the name of the tangomon, and
@@ -65,19 +65,21 @@ msgid ""
 "You failed the test given to you by {tangomon}! {tangomon} loses faith in "
 "you and \"{tangoji}\" is transformed back into a tangoji!"
 msgstr ""
+"{tangomon}のテストを失敗した！{tangomon}はもうあなたに信じないから逃げる！「{tangoji}」は"
+"再びタンゴジになる。"
 
 # Shown when the player's tangomon successfully attacks. {player} is
 # replaced with the name of the player's tangomon, {tangoji} is replaced
 # with the tangoji used to attack, and {damage} is replaced with the
 # amount of damage inflicted.
 msgid "{player} attacks with \"{tangoji}\", inflicting {damage} damage!"
-msgstr ""
+msgstr "{player}は「{tangoji}」と攻撃！ダメージは{damage}HPだ。"
 
 # Shown when the player's tangomon fails to attack due to an incorrect
 # tangoji entry. {tangoji} is replaced with the tangoji the player was
 # supposed to enter.
 msgid "Attack failed! Correct Tangoji (\"{tangoji}\") not entered."
-msgstr ""
+msgstr "攻撃を失敗！正しいタンゴジの「{tangoji}」を書かなかった。"
 
 # Shown when the player's tangomon successfully defends, but the defense
 # is not strong enough to block the attack completely (usually caused by
@@ -89,14 +91,14 @@ msgstr ""
 msgid ""
 "Defense with \"{tangoji}\" succeeded! Damage from {enemy} attack is only "
 "{damage} (reduced by {defense})."
-msgstr ""
+msgstr "「{tangoji}」とディフェンスを成功！{enemy}の攻撃のダメージを{defense}HPに減らした。ダメージは{damage}HPだけだ。"
 
 # Shown when the player's tangomon successfully defends and the defense
 # completely blocks the enemy attack. {tangoji} is replaced with the
 # tangoji used to defend and {enemy} is replaced with the name of the
 # enemy tangomon.
 msgid "Defense with \"{tangoji}\" succeeded! {enemy} attack blocked."
-msgstr ""
+msgstr "「{tangoji}」とディフェンスを成功！{enemy}の攻撃は失敗しちゃう。"
 
 # Shown when the player's tangomon fails to defend due to an incorrect
 # tangoji entry. {tangoji} is replaced with the tangoji the player was
@@ -106,6 +108,8 @@ msgid ""
 "Defense failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} "
 "attacks, inflicting {damage} damage."
 msgstr ""
+"ディフェンスを失敗！正しいタンゴジの「{tangoji}」を書かなかった。"
+"{enemy}は攻撃。ダメージは{damage}HP。"
 
 # Shown when a tangokan is used successfully. {tangomon} is replaced
 # with the name of the new tangomon.
@@ -131,6 +135,8 @@ msgid ""
 "WARNING: If you leave this battle, you will lose your current tangomon! Are "
 "you sure?"
 msgstr ""
+"警報よ！この戦いから出れば、今のタンゴモンは逃げる！つまり、このタンゴモンをなくす！"
+"本当にこのタンゴモンをなくして出たいか？"
 
 # Shown in "yes/no" dialog boxes
 msgid "No"
@@ -144,17 +150,17 @@ msgstr "はい"
 # enemy tangomon. {tangomon} is replaced with the name of this enemy
 # enemy tangomon.
 msgid "Do you want to impress the {tangomon} with one of your tangokans?"
-msgstr ""
+msgstr "タンゴカンを使って{tangomon}をチームに入ること説得したいか？"
 
 # Message box asking the player if they want to "learn" (add) a new
 # tangoji. {tangomon} is replaced with the name of the enemy tangomon
 # which offers to "teach" it.
 msgid "The {tangomon} offers to teach you a new tangoji. Accept the offer?"
-msgstr ""
+msgstr "{tangomon}から新しいタンゴジを得たいか？"
 
 # Shown when a new tangoji is added.
 msgid "New tangoji added!"
-msgstr ""
+msgstr "新しいタンゴジを得た！"
 
 # Shown when the player attempts to make a tangokan when they have too
 # few tangojis to do so. {minimum} is replaced by the minimum number of
@@ -166,6 +172,8 @@ msgid ""
 "tangokan, you have at least {minimum} left over. Fight some tangomon to get "
 "more tangojis!"
 msgstr ""
+"タンゴジ量は{minimum}語だけから、タンゴカンを作れません。他のタンゴモンと戦って、"
+"もっとタンゴジを得てください。"
 
 # Default text use for the test textbox. Should ideally be a phrase that
 # incorporates most kinds of characters the current language uses (e.g.
