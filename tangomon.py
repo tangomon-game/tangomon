@@ -467,10 +467,12 @@ class Arena(Room):
                 self.player_hp -= damage
                 self.player_object.image_alpha = 128
                 play_sound(hurt_sound)
+                play_sound(block_sound)
                 self.notification_text = _('Defense with "{tangoji}" succeeded! Damage from {enemy} attack is only {damage} (reduced by {defense}).').format(
                     enemy=self.enemy_name, tangoji=word, damage=damage,
                     defense=defense)
             else:
+                play_sound(block_sound)
                 self.notification_text = _('Defense with "{tangoji}" succeeded! {enemy} attack blocked.').format(
                         enemy=self.enemy_name, tangoji=word)
                 
@@ -1785,6 +1787,7 @@ create_fonts()
 
 # Load sounds
 hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
+block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
 
 select_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "select.ogg"))
 confirm_sound = sge.snd.Sound(None)
