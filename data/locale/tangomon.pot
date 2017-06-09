@@ -296,6 +296,14 @@ msgstr ""
 msgid "View Tangoji"
 msgstr ""
 
+# Pause menu option: Changes a tangoji
+msgid "Change Tangoji"
+msgstr ""
+
+# Pause menu option: Creates a tangokan
+msgid "Create Tangokan"
+msgstr ""
+
 # Pause menu option: Ends the game and returns to the title screen
 msgid "Return to Title Screen"
 msgstr ""
@@ -329,6 +337,14 @@ msgstr ""
 msgid ""
 "HP: {hp}\n"
 "Power: {power}"
+msgstr ""
+
+# Dialog box asking the player to change an existing tangoji.
+msgid "Enter your desired changes to this tangoji."
+msgstr ""
+
+# Dialog box asking the player to change the clue for an existing tangoji.
+msgid "Enter your desired changes to this tangoji's clue."
 msgstr ""
 
 # Dialog box asking the player to enter a new tangoji.
