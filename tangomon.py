@@ -914,7 +914,7 @@ class FontChooser(xsge_gui.Dialog):
         change_font_button.event_press = press_change_font
 
         h = y - xsge_gui.textbox_sprite.height - 3 * padding
-        text = _('If you will be using non-ASCII characters, please ensure that they display correctly by typing them into the test textbox above. If they do not, please specify a different font to use by entering its name in the textbox below and then clicking "Change Font". When you are finished, press "Done".')
+        text = _('If you will be using non-ASCII characters, please ensure that they display correctly by typing them into the test textbox above. If they do not, please specify a different font to use by entering its name in the textbox below and then clicking "Change Font". When you are finished, press "Done".\n\nFor English, some good font choices are Droid Sans and Arial.')
         label = xsge_gui.Label(
             self, self.width / 2, 2 * padding + xsge_gui.textbox_sprite.height,
             1, text, width=(self.width - 2 * padding), height=h,

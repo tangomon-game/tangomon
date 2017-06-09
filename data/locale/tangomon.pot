@@ -187,12 +187,26 @@ msgstr ""
 
 # Text explaining the font dialog. Note: this dialog is shown on first
 # run as well as any time the "Select Font" option in the Options menu
-# is chosen.
+# is chosen. The font recommendation should not be translated; rather, it
+# should be substituted with a similar recommendation for the language
+# being translated to. For example, if making a Russian translation,
+# some fonts which support all Russian characters should be recommended.
+# Please include at least one recommendation commonly found on GNU/Linux
+# systems if possible. It is also preferable to include recommendations
+# for popular secondary systems, such as Windows and Mac OS X, if
+# possible. The recommendations for English should be fine for most other
+# European languages as well. If you have no recommendations, it is fine
+# to simply omit that line in your translation.
+# NOTE: This should be in ASCII only! If Unicode characters are included,
+# the default font may not show them and the player may be left confused
+# as to what needs to be done.
 msgid ""
 "If you will be using non-ASCII characters, please ensure that they display "
 "correctly by typing them into the test textbox above. If they do not, please "
 "specify a different font to use by entering its name in the textbox below "
-"and then clicking \"Change Font\". When you are finished, press \"Done\"."
+"and then clicking \"Change Font\". When you are finished, press \"Done\".\n"
+"\n"
+"For English, some good font choices are Droid Sans and Arial."
 msgstr ""
 
 # Main menu item (Starts a new game)
