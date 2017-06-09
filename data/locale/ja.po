@@ -273,15 +273,15 @@ msgstr "スケーリングは「{}」"
 
 # Sound option (binary option)
 msgid "Sound: {}"
-msgstr "音：　"
+msgstr "音：　{}"
 
 # Music option (binary option)
 msgid "Music: {}"
-msgstr "音楽：　"
+msgstr "音楽：　{}"
 
 # Show FPS option (binary option)
 msgid "Show FPS: {}"
-msgstr "フレームレートに見せる：　"
+msgstr "フレームレートに見せる：　{}"
 
 # Opens the font selection dialog
 msgid "Select Font"
