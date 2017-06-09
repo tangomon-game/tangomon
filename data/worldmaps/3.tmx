@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="16" tileheight="16" nextobjectid="175">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="120" height="60" tilewidth="16" tileheight="16" nextobjectid="176">
  <properties>
   <property name="music" value="overworld.ogg"/>
  </properties>
@@ -67,6 +67,11 @@
   <object id="174" x="1776" y="784" width="16" height="16">
    <properties>
     <property name="dest" value="1.tmx"/>
+   </properties>
+  </object>
+  <object id="175" x="288" y="224" width="16" height="16">
+   <properties>
+    <property name="dest" value="4.tmx"/>
    </properties>
   </object>
  </objectgroup>
