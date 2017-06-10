@@ -1274,8 +1274,8 @@ class TangomonInfo(xsge_gui.Dialog):
 
         y = padding
         name_label = xsge_gui.Label(
-            self, self.width / 2, y, 10, name, width=(self.width - 2 * padding),
-            halign=sge.s.center)
+            self, self.width / 2, y, 10, name, font=font_big,
+            width=(self.width - 2 * padding), halign=sge.s.center)
 
         y += font.get_height(name) + padding
         sprite_widget = xsge_gui.DecorativeWidget(
@@ -1285,7 +1285,7 @@ class TangomonInfo(xsge_gui.Dialog):
         info_text = _("HP: {hp}\nPower: {power}").format(
             hp=hp, power=int(base_power))
         info_label = xsge_gui.Label(
-            self, self.width / 2, y, 10, info_text,
+            self, self.width / 2, y, 10, info_text, font=font_big,
             width=(self.width - 2 * padding), halign=sge.s.center)
 
     def event_press_left(self):
