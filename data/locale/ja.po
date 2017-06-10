@@ -216,7 +216,7 @@ msgid ""
 "For English, some good font choices are Droid Sans and Arial."
 msgstr ""
 "Ue no tekisuto bokkusu no ji ga mienakereba, shita no tekisuto bokkusu ni, "
-"subete no mitai ji ni miseru fonto no namae wo kaite, \"Fonto wo kaeru\" no "
+"subete no mitai ji wo miseru fonto no namae wo kaite, \"Fonto wo kaeru\" no "
 "botan wo oshite kudasai. Hoshii nara ue no tekisuto bokkusu de kakemasu. "
 "Ii naraba \"終わる\" no botan wo oshite kudasai.\n"
 "\n"
@@ -289,7 +289,7 @@ msgstr "音楽：{}"
 
 # Show FPS option (binary option)
 msgid "Show FPS: {}"
-msgstr "フレームレートに見せる：{}"
+msgstr "フレームレートを見せる：{}"
 
 # Opens the font selection dialog
 msgid "Select Font"
@@ -301,15 +301,15 @@ msgstr "続く"
 
 # Pause menu option: shows current player statistics
 msgid "View Statistics"
-msgstr "統計に見る"
+msgstr "統計を見る"
 
 # Pause menu option: Shows current tangomon
 msgid "View Tangomon"
-msgstr "タンゴモンに見る"
+msgstr "タンゴモンを見る"
 
 # Pause menu option: Shows current tangoji
 msgid "View Tangoji"
-msgstr "タンゴジに見る"
+msgstr "タンゴジを見る"
 
 # Pause menu option: Changes a tangoji
 msgid "Change Tangoji"
