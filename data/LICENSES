@@ -133,6 +133,8 @@ worldmaps/2.tmx
 worldmaps/3.tmx
 worldmaps/4.tmx
 worldmaps/base.tmx
+sounds/cancel.wav
+sounds/confirm.wav
 sounds/block.wav
 sounds/type.wav
 
