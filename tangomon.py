@@ -345,9 +345,6 @@ class Arena(Room):
 
         self.notification_text = ""
 
-        hps = [get_tangomon_hp_max(s) for s in player_tangomon]
-        powers = [get_tangomon_base_power(s) for s in player_tangomon]
-
         self.pt_name = player_tangomon.pop(self.player)
         self.player_name = get_tangomon_name(self.pt_name)
         self.player_hp = get_tangomon_hp_max(self.pt_name)
@@ -366,11 +363,21 @@ class Arena(Room):
         self.enemy_object = sge.dsp.Object.create(x, y, sprite=enemy_sprite,
                                                   tangible=False)
 
-        # Peer buff for player's weak tangomon
-        avg_hp = int(sum(hps) / len(hps))
-        avg_power = int(sum(powers) / len(powers))
-        self.player_hp = max(self.player_hp, avg_hp)
-        self.player_base_power = max(self.player_base_power, avg_power)
+        # Peer buff (weaker tangomon get strength from stronger tangomon)
+        n = 0
+        total_hp = 0
+        total_power = 0
+        for s in player_tangomon:
+            hp = get_tangomon_hp_max(s)
+            if hp > self.player_hp:
+                total_hp += hp
+                total_power += get_tangomon_base_power(s)
+                n += 1
+        if n:
+            avg_hp = int(total_hp / n)
+            avg_power = int(total_power / n)
+            self.player_hp = max(self.player_hp, avg_hp)
+            self.player_base_power = max(self.player_base_power, avg_power)
 
         player_tangojections.sort(key=lambda d: d.get("time"))
         if (player_tangojections and
