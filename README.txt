@@ -15,18 +15,17 @@ To run the Tangomon source code, you will need the following
 dependencies:
 
 - Python 2 (2.7 or later) or 3 (3.1 or later) <http://www.python.org>
-- Pygame 1.9.1 or later <http://pygame.org/download.shtml>
+- Pygame 1.9.1 or later <http://pygame.org>
+- uniseg <https://pypi.python.org/pypi/uniseg>
 
 Once you have installed the dependencies, you can start Tangomon by
 running tangomon.py. On most systems, this should be done by
 double-clicking on it; if you are shown a dialog asking you if you want
 to display or run the file, choose to run it.
 
-Python 2 will be used by default. To run Tangomon with Python 3 instead,
-you can either change the shebang on line 1 from "python2" to "python3",
-or explicitly run the Python 3 executable, e.g. with
-"python3 tangomon.py" (the exact command may be different depending on
-your system).
+The default Python version will be used. To use a different version of
+Python, change the shebang on line 1 of tangomon.py from "python" to
+"python2" or "python3" (or any other valid Python version).
 
 There are some command-line options that can be passed. Run Tangomon in a
 terminal with the "-h" command-line option for more information.
@@ -35,7 +34,7 @@ terminal with the "-h" command-line option for more information.
 HOW TO PLAY
 
 Use the arrow keys to move and the Enter key to select, or to open the
-pause menu.
+pause menu (where you can access all important in-game actions).
 
 The game is simple: You start with one "tangomon" and three "tangojis".
 Tangojis are what you use to attack; they are words you need to
@@ -43,7 +42,16 @@ memorize. Your tangojis can be whatever you want them to be, but the
 idea is for them to be things you are trying to learn, such as
 vocabulary words. Tangomon are the creatures which battle using
 tangojis. You can find them by exploring the map, but not while you are
-on a road or in a town.
+on a road or other safe area.
+
+During a battle, you will be shown the clues to tangojis randomly
+selected from your tangoji list. Type the tangoji corresponding with the
+clue being shown and then press the Enter key. If you are correct, your
+tangomon will successfully either attack the other tangomon, or defend
+against the other tangomon's attack. The faster you enter the correct
+tangoji, the more effectiveness the action will have. However, if you
+are incorrect, your tangomon will be confused and not perform the
+action at all.
 
 When you defeat a tangomon, that tangomon will offer to teach you a new
 tangoji. Again, you choose your tangojis if you accept their offer.
