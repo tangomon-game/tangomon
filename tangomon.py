@@ -59,6 +59,10 @@ parser.add_argument(
     "-l", "--lang",
     help=_("Manually choose a different language to use."))
 parser.add_argument(
+    "--nosave",
+    help=_("Disable saving (for testing purposes)"),
+    action="store_true")
+parser.add_argument(
     "--nodelta",
     help=_("Disable delta timing. Causes the game to slow down when it can't run at full speed instead of becoming choppier."),
     action="store_true")
@@ -67,6 +71,7 @@ parser.add_argument(
     help=_('Where to load the game data from (Default: "{}")').format(DATA))
 args = parser.parse_args()
 
+NOSAVE = args.nosave
 DELTA = not args.nodelta
 if args.datadir:
     DATA = args.datadir
@@ -1618,19 +1623,21 @@ def new_game():
 def save_game():
     global save_slots
 
-    if current_save_slot is not None:
-        save_slots[current_save_slot] = {
-            "player_name": player_name, "player_character": player_character,
-            "player_map": player_map, "player_x": player_x,
-            "player_y": player_y, "player_tangojis": player_tangojis,
-            "player_tangokans": player_tangokans,
-            "player_tangomon": player_tangomon,
-            "player_tangojections": player_tangojections,
-            "grassland_tangomon_encountered": grassland_tangomon_encountered,
-            "forest_tangomon_encountered": forest_tangomon_encountered,
-            "dungeon_tangomon_encountered": dungeon_tangomon_encountered}
+    if not NOSAVE:
+        if current_save_slot is not None:
+            save_slots[current_save_slot] = {
+                "player_name": player_name,
+                "player_character": player_character,
+                "player_map": player_map, "player_x": player_x,
+                "player_y": player_y, "player_tangojis": player_tangojis,
+                "player_tangokans": player_tangokans,
+                "player_tangomon": player_tangomon,
+                "player_tangojections": player_tangojections,
+                "grassland_tangomon_encountered": grassland_tangomon_encountered,
+                "forest_tangomon_encountered": forest_tangomon_encountered,
+                "dungeon_tangomon_encountered": dungeon_tangomon_encountered}
 
-    write_to_disk()
+        write_to_disk()
 
 
 def load_game():
@@ -1698,17 +1705,18 @@ def load_map():
 
 
 def write_to_disk():
-    # Write our saves and settings to disk.
-    cfg = {"version": 0, "first_run": first_run, "font_name": font_name,
-           "fullscreen": fullscreen, "scale_method": scale_method,
-           "sound_enabled": sound_enabled, "music_enabled": music_enabled,
-           "fps_enabled": fps_enabled}
+    if not NOSAVE:
+        # Write our saves and settings to disk.
+        cfg = {"version": 0, "first_run": first_run, "font_name": font_name,
+               "fullscreen": fullscreen, "scale_method": scale_method,
+               "sound_enabled": sound_enabled, "music_enabled": music_enabled,
+               "fps_enabled": fps_enabled}
 
-    with open(os.path.join(CONFIG, "config.json"), 'w') as f:
-        json.dump(cfg, f, indent=4)
+        with open(os.path.join(CONFIG, "config.json"), 'w') as f:
+            json.dump(cfg, f, indent=4)
 
-    with open(os.path.join(CONFIG, "save_slots.json"), 'w') as f:
-        json.dump(save_slots, f, indent=4)
+        with open(os.path.join(CONFIG, "save_slots.json"), 'w') as f:
+            json.dump(save_slots, f, indent=4)
 
 
 TYPES = {"objects": get_object, "player": Player,
