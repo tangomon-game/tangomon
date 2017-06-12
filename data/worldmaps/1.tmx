@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <map version="1.0" orientation="orthogonal" renderorder="right-down" width="40" height="60" tilewidth="16" tileheight="16" nextobjectid="182">
  <properties>
-  <property name="music" value="overworld.ogg"/>
+  <property name="music" value="dungeon.ogg"/>
  </properties>
  <tileset firstgid="1" source="../tilesets/basictiles.tsx"/>
  <tileset firstgid="121" source="../tilesets/objects.tsx"/>
