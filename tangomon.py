@@ -488,8 +488,15 @@ class Arena(Room):
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
             defense = max(1, int(self.player_base_power * self.tangoji_bonus))
+
+            # Critical Block
+            if random.random() < CRITICAL_CHANCE:
+                defense *= CRITICAL_MULT
+                play_sound(critical_sound)
+
             damage = int(max(0, self.enemy_base_power - defense))
             interval = ATTACK_INTERVAL_TIME
+
             if damage > 0:
                 self.player_hp -= damage
                 self.player_object.image_alpha = 128
