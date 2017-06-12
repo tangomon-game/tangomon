@@ -143,6 +143,7 @@ worldmaps/4.tmx
 worldmaps/base.tmx
 sounds/cancel.wav
 sounds/confirm.wav
+sounds/critical.wav
 sounds/block.wav
 sounds/type.wav
 

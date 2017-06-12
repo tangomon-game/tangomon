@@ -119,6 +119,8 @@ TANGOJI_MULT_DECREMENT = 0.025
 TANGOJI_MULT_MIN = 0.25
 TANGOJI_MULT_PERSISTENT_MIN = 0.75
 TANGOJI_MULT_TIME_BONUS = 0.5 / TANGOJI_ENTRY_TIME
+CRITICAL_CHANCE = 0.02
+CRITICAL_MULT = 2
 
 PLAYER_SPEED = 1
 PLAYER_ENCOUNTER_CHANCE = 0.01
@@ -442,12 +444,21 @@ class Arena(Room):
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
             damage = int(self.player_base_power * self.tangoji_bonus)
+
+            # Critical hit
+            if random.random() < CRITICAL_CHANCE:
+                damage *= CRITICAL_MULT
+                play_sound(critical_sound)
+                self.notification_text = _("{player} attacks with \"{tangoji}\", inflicting {damage} damage! It's super effective!").format(
+                    player=self.player_name, tangoji=word, damage=damage)
+            else:
+                self.notification_text = _('{player} attacks with "{tangoji}", inflicting {damage} damage!').format(
+                    player=self.player_name, tangoji=word, damage=damage)
+
             self.enemy_hp -= damage
             self.enemy_object.image_alpha = 128
             interval = ATTACK_INTERVAL_TIME
             play_sound(hurt_sound)
-            self.notification_text = _('{player} attacks with "{tangoji}", inflicting {damage} damage!').format(
-                player=self.player_name, tangoji=word, damage=damage)
         else:
             interval = ATTACK_INTERVAL_FAIL_TIME
             self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered.").format(
@@ -1796,6 +1807,7 @@ create_fonts()
 # Load sounds
 hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
 block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
+critical_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "critical.wav"))
 
 select_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "select.ogg"))
 confirm_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "confirm.wav"))

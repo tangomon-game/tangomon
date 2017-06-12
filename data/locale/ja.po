@@ -75,6 +75,13 @@ msgstr ""
 msgid "{player} attacks with \"{tangoji}\", inflicting {damage} damage!"
 msgstr "{player}は「{tangoji}」と攻撃！ダメージは{damage}HPだ。"
 
+# "Critical hit" version of the above entry. Shown when (randomly)
+# double damage occurs for the player's attack.
+msgid ""
+"{player} attacks with \"{tangoji}\", inflicting {damage} damage! "
+"It's super effective!"
+msgstr "{player}は「{tangoji}」と攻撃！ダメージは{damage}HPだ。クリティカルヒットだ！"
+
 # Shown when the player's tangomon fails to attack due to an incorrect
 # tangoji entry. {tangoji} is replaced with the tangoji the player was
 # supposed to enter.
