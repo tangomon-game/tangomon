@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.0"
+__version__ = "1.1a0"
 
 import argparse
 import datetime
@@ -112,9 +112,10 @@ TANGOJI_MIN = 3
 FOREST_LEVEL_DEPTH = 3
 DUNGEON_LEVEL_DEPTH = 5
 
-HEALTH_MAX_START = 100
-BASE_POWER_START = 10
-INCREMENT_FACTOR = 1.1
+HEALTH_MAX_START = 500
+BASE_POWER_START = 50
+HEALTH_INCREMENT_FACTOR = 1.025
+BASE_POWER_INCREMENT_FACTOR = 1.02
 
 ATTACK_INTERVAL_TIME = 4 * FPS
 ATTACK_INTERVAL_FAIL_TIME = 8 * FPS
@@ -1475,21 +1476,21 @@ def get_tangomon_hp_max(tangomon):
             grassland_tangomon_encountered.append(tangomon)
 
         i = grassland_tangomon_encountered.index(tangomon)
-        return int(HEALTH_MAX_START * (INCREMENT_FACTOR ** i))
+        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
     elif tangomon in forest_tangomon:
         if tangomon not in forest_tangomon_encountered:
             forest_tangomon_encountered.append(tangomon)
 
         i = forest_tangomon_encountered.index(tangomon)
         i += len(grassland_tangomon)
-        return int(HEALTH_MAX_START * (INCREMENT_FACTOR ** i))
+        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
     elif tangomon in dungeon_tangomon:
         if tangomon not in dungeon_tangomon_encountered:
             dungeon_tangomon_encountered.append(tangomon)
 
         i = dungeon_tangomon_encountered.index(tangomon)
         i += len(grassland_tangomon) + len(forest_tangomon)
-        return int(HEALTH_MAX_START * (INCREMENT_FACTOR ** i))
+        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
     else:
         return 1
 
@@ -1500,21 +1501,21 @@ def get_tangomon_base_power(tangomon):
             grassland_tangomon_encountered.append(tangomon)
 
         i = grassland_tangomon_encountered.index(tangomon)
-        return BASE_POWER_START * (INCREMENT_FACTOR ** i)
+        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
     elif tangomon in forest_tangomon:
         if tangomon not in forest_tangomon_encountered:
             forest_tangomon_encountered.append(tangomon)
 
         i = forest_tangomon_encountered.index(tangomon)
         i += len(grassland_tangomon)
-        return BASE_POWER_START * (INCREMENT_FACTOR ** i)
+        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
     elif tangomon in dungeon_tangomon:
         if tangomon not in dungeon_tangomon_encountered:
             dungeon_tangomon_encountered.append(tangomon)
 
         i = dungeon_tangomon_encountered.index(tangomon)
         i += len(grassland_tangomon) + len(forest_tangomon)
-        return BASE_POWER_START * (INCREMENT_FACTOR ** i)
+        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
     else:
         return 1
 
