@@ -1177,7 +1177,6 @@ class WorldmapMenu(ModalMenu):
         elif self.choice == 2:
             play_sound(confirm_sound)
             TangomonInfo().show()
-            WorldmapMenu.create(default=self.choice)
         elif self.choice == 3:
             play_sound(confirm_sound)
             TangojiMenu.create_page()
@@ -1628,6 +1627,7 @@ def reset_game():
     grassland_tangomon_encountered = []
     forest_tangomon_encountered = []
     dungeon_tangomon_encountered = []
+    load_map()
 
 
 def new_game():
