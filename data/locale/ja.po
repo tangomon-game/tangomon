@@ -19,8 +19,8 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 1.0\n"
 "Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
-"POT-Creation-Date: 2017-06-09 10:30-0400\n"
-"PO-Revision-Date: 2017-06-09 10:30-0400\n"
+"POT-Creation-Date: 2017-06-18 08:30-0400\n"
+"PO-Revision-Date: 2017-06-18 08:30-0400\n"
 "Last-Translator: Julie <onpon4@riseup.net>\n"
 "Language-Team: Japanese\n"
 "Language: ja\n"
@@ -186,6 +186,10 @@ msgstr ""
 "タンゴジ量は{minimum}語だけから、タンゴカンを作れません。他のタンゴモンと戦って、"
 "もっとタンゴジを得てください。"
 
+# Shown to confirm resetting the game.
+msgid "This will only reset your location and tangomon. Are you sure?"
+msgstr "所とタンゴモンだけリセットします。いいですか？"
+
 # Default text use for the test textbox. Should ideally be a phrase that
 # incorporates most kinds of characters the current language uses (e.g.
 # if accents are used, make sure to include some words with those
@@ -329,6 +333,10 @@ msgstr "タンゴジを変える"
 # Pause menu option: Creates a tangokan
 msgid "Create Tangokan"
 msgstr "タンゴカンを作る"
+
+# Pause menu option: Resets the game
+msgid "Reset Game"
+msgstr "ゲームをリセット"
 
 # Pause menu option: Ends the game and returns to the title screen
 msgid "Return to Title Screen"

@@ -1159,7 +1159,7 @@ class WorldmapMenu(ModalMenu):
 
     items = [_("Continue Game"), _("View Statistics"), _("View Tangomon"),
              _("View Tangoji"), _("Change Tangoji"), _("Create Tangokan"),
-             _("Return to Title Screen")]
+             _("Reset Game"), _("Return to Title Screen")]
 
     def event_choose(self):
         if self.choice == 1:
@@ -1177,6 +1177,7 @@ class WorldmapMenu(ModalMenu):
         elif self.choice == 2:
             play_sound(confirm_sound)
             TangomonInfo().show()
+            WorldmapMenu.create(default=self.choice)
         elif self.choice == 3:
             play_sound(confirm_sound)
             TangojiMenu.create_page()
@@ -1191,7 +1192,15 @@ class WorldmapMenu(ModalMenu):
             else:
                 msg = _("You don't have enough tangojis in reserve to make a tangokan. You can only create a tangokan if, after spending one of your tangojis to make the tangokan, you have at least {minimum} left over. Fight some tangomon to get more tangojis!").format(minimum=TANGOJI_MIN)
                 DialogBox(gui_handler, msg).show()
+                WorldmapMenu.create(default=self.choice)
         elif self.choice == 6:
+            text = _("This will only reset your location and tangomon. Are you sure?")
+            buttons = [_("No"), _("Yes")]
+            if xsge_gui.show_message(gui_handler, message=text, buttons=buttons):
+                reset_game()
+            else:
+                WorldmapMenu.create(default=self.choice)
+        elif self.choice == 7:
             save_game()
             sge.game.start_room.start()
         else:
@@ -1602,6 +1611,23 @@ def create_fonts():
     xsge_gui.button_font = sge.gfx.Font(font_name, size=12, bold=True)
     xsge_gui.textbox_font = sge.gfx.Font(font_name, size=12)
     xsge_gui.title_font = sge.gfx.Font(font_name, size=14, bold=True)
+
+
+def reset_game():
+    global player_map
+    global player_x
+    global player_y
+    global player_tangomon
+    global grassland_tangomon_encountered
+    global forest_tangomon_encountered
+    global dungeon_tangomon_encountered
+    player_map = None
+    player_x = None
+    player_y = None
+    player_tangomon = []
+    grassland_tangomon_encountered = []
+    forest_tangomon_encountered = []
+    dungeon_tangomon_encountered = []
 
 
 def new_game():
