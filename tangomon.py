@@ -141,7 +141,6 @@ HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 MONTH = 30 * DAY
 TANGOKAN_WAIT_TIME = DAY
-TANGOJECT_TIMES = [2 * DAY, 7 * DAY, 21 * DAY, 2 * MONTH, 6 * MONTH, 18 * MONTH]
 
 first_run = True
 
@@ -541,11 +540,11 @@ class Arena(Room):
         if self.tangoji_bonus:
             interval = ATTACK_INTERVAL_TIME
             player_tangomon.append(self.enemy)
-            for wait in TANGOJECT_TIMES:
-                tangoji = self.tangoji.copy()
-                tangoji["time"] = time.time() + wait
-                player_tangojections.append(tangoji)
-
+            tangoji = self.tangoji.copy()
+            wait = DAY
+            tangoji["time"] = time.time() + wait
+            tangoji["next_time"] = wait * 2
+            player_tangojections.append(tangoji)
             self.notification_text = _("Impression succeeded! {tangomon} has joined your team!").format(
                 tangomon=self.enemy_name)
         else:
