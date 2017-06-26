@@ -437,10 +437,17 @@ class Arena(Room):
             self.callback = None
 
     def tangoject(self):
+        global player_tangojis
+        global player_tangojections
+
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
             self.notification_text = _("You passed the test given to you by {tangomon}!").format(
                 tangomon=self.player_name)
+            self.tangoji["time"] += self.tangoji.setdefault("next_time", DAY)
+            self.tangoji["next_time"] *= 2
+            player_tangojections.append(self.tangoji)
+            player_tangojections.sort(key=lambda d: d.get("time"))
             self.alarms["init_player_attack"] = ATTACK_INTERVAL_TIME
         else:
             self.notification_text = _("You failed the test given to you by {tangomon}! {tangomon} loses faith in you and \"{tangoji}\" is transformed back into a tangoji!").format(
@@ -1667,6 +1674,7 @@ def save_game():
     if not NOSAVE:
         if current_save_slot is not None:
             save_slots[current_save_slot] = {
+                "version": 1,
                 "player_name": player_name,
                 "player_character": player_character,
                 "player_map": player_map, "player_x": player_x,
@@ -1710,6 +1718,27 @@ def load_game():
         grassland_tangomon_encountered = slot.get("grassland_tangomon_encountered", [])
         forest_tangomon_encountered = slot.get("forest_tangomon_encountered", [])
         dungeon_tangomon_encountered = slot.get("dungeon_tangomon_encountered", [])
+
+        if slot.get("version", 0) < 1:
+            tjs = list(set([(d["word"], d["clue"]) for d in player_tangojections]))
+            for word, clue in tjs:
+                ilist = []
+                for i in six.moves.range(len(player_tangojections)):
+                    if (player_tangojections[i]["word"] == word and
+                            player_tangojections[i]["clue"] == clue):
+                        ilist.append(i)
+
+                assert ilist
+                if len(ilist) >= 2:
+                    tj1 = player_tangojections[ilist[0]]
+                    tj2 = player_tangojections[ilist[1]]
+                    tj1["next_time"] = tj2["time"] - tj1["time"]
+                else:
+                    player_tangojections[ilist[0]]["next_time"] = 36 * MONTH
+
+                for i in reversed(ilist[1:]):
+                    del player_tangojections[i]
+
         load_map()
     else:
         new_game()
