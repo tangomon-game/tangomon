@@ -443,7 +443,8 @@ class Arena(Room):
         if self.tangoji_bonus:
             self.notification_text = _("You passed the test given to you by {tangomon}!").format(
                 tangomon=self.player_name)
-            self.tangoji["time"] += self.tangoji.setdefault("next_time", DAY)
+            self.tangoji["time"] = (time.time() +
+                                    self.tangoji.setdefault("next_time", DAY))
             self.tangoji["next_time"] *= 2
             player_tangojections.append(self.tangoji)
             player_tangojections.sort(key=lambda d: d.get("time"))
