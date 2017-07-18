@@ -144,7 +144,7 @@ TANGOKAN_WAIT_TIME = DAY
 
 first_run = True
 
-font_name = "Droid Sans"
+font_name = ""
 fullscreen = False
 scale_method = None
 sound_enabled = True
