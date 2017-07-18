@@ -439,6 +439,8 @@ class Arena(Room):
         global player_tangojis
         global player_tangojections
 
+        self.reset_state()
+
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
             self.notification_text = _("You passed the test given to you by {tangomon}!").format(
