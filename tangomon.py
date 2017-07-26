@@ -122,9 +122,9 @@ ATTACK_INTERVAL_FAIL_TIME = 8 * FPS
 TANGOJI_ENTRY_TIME = 30 * FPS
 TANGOJI_MULT_START = 1.0
 TANGOJI_MULT_DECREMENT = 0.025
-TANGOJI_MULT_MIN = 0.1
-TANGOJI_MULT_PERSISTENT_MIN = 0.25
-TANGOJI_MULT_BULK_BONUS = 0.01
+TANGOJI_MULT_MIN = 0.25
+TANGOJI_MULT_PERSISTENT_MIN = 0.5
+TANGOJI_MULT_BULK_BONUS = 0.005
 TANGOJI_MULT_TIME_BONUS = 0.5 / TANGOJI_ENTRY_TIME
 CRITICAL_CHANCE = 0.02
 CRITICAL_MULT = 2
@@ -435,6 +435,9 @@ class Arena(Room):
                                            TANGOJI_MULT_TIME_BONUS)
                     del self.alarms["time_limit"]
             else:
+                self.tangoji["power"] += TANGOJI_MULT_DECREMENT
+                self.tangoji["power"] = min(self.tangoji["power"],
+                                            TANGOJI_MULT_START)
                 self.tangoji_bonus = 0
 
             self.callback()
@@ -459,7 +462,7 @@ class Arena(Room):
         else:
             self.notification_text = _("You failed the test given to you by {tangomon}! {tangomon} loses faith in you and \"{tangoji}\" is transformed back into a tangoji!").format(
                 tangomon=self.player_name, tangoji=word)
-            self.tangoji["power"] = TANGOJI_MULT_PERSISTENT_MIN
+            self.tangoji["power"] = TANGOJI_MULT_START
             player_tangojis.append(self.tangoji)
             self.alarms["player_lose"] = ATTACK_INTERVAL_FAIL_TIME
 
