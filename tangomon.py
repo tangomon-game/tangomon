@@ -629,15 +629,6 @@ class Arena(Room):
             self.reset_state()
 
             tangokans = get_player_active_tangokans()
-            #if tangokans:
-            #    msg = _("Do you want to impress the {tangomon} with one of your tangokans?").format(
-            #        tangomon=self.enemy_name)
-            #    buttons = [_("No"), _("Yes")]
-            #    use_tangokan = xsge_gui.show_message(gui_handler, message=msg,
-            #                                          buttons=buttons)
-            #else:
-            #    use_tangokan = False
-
             if tangokans:
                 i = random.choice(tangokans)
                 self.tangoji = player_tangokans.pop(i)

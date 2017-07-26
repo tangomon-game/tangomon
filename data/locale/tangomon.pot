@@ -152,16 +152,6 @@ msgstr ""
 msgid "Yes"
 msgstr ""
 
-# Message box asking the player if they want to use a tangokan on the
-# enemy tangomon. {tangomon} is replaced with the name of this enemy
-# enemy tangomon.
-msgid "Do you want to impress the {tangomon} with one of your tangokans?"
-msgstr ""
-
-# Shown when a new tangoji is added.
-msgid "New tangoji added!"
-msgstr ""
-
 # Shown when the player attempts to make a tangokan when they have too
 # few tangojis to do so. {minimum} is replaced by the minimum number of
 # tangojis the player must have at all time (i.e. they must have more
@@ -184,7 +174,7 @@ msgstr ""
 msgid "{word}\n\n{clue}\n\nPower: {power}%"
 msgstr ""
 
-# Default text use for the test textbox. Should ideally be a phrase that
+# Default text used for the test textbox. Should ideally be a phrase that
 # incorporates most kinds of characters the current language uses (e.g.
 # if accents are used, make sure to include some words with those
 # accents). The player can of course type their own text, so exactly
