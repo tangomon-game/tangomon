@@ -629,32 +629,23 @@ class Arena(Room):
             self.reset_state()
 
             tangokans = get_player_active_tangokans()
-            if tangokans:
-                msg = _("Do you want to impress the {tangomon} with one of your tangokans?").format(
-                    tangomon=self.enemy_name)
-                buttons = [_("No"), _("Yes")]
-                use_tangokan = xsge_gui.show_message(gui_handler, message=msg,
-                                                      buttons=buttons)
-            else:
-                use_tangokan = False
+            #if tangokans:
+            #    msg = _("Do you want to impress the {tangomon} with one of your tangokans?").format(
+            #        tangomon=self.enemy_name)
+            #    buttons = [_("No"), _("Yes")]
+            #    use_tangokan = xsge_gui.show_message(gui_handler, message=msg,
+            #                                          buttons=buttons)
+            #else:
+            #    use_tangokan = False
 
-            if use_tangokan:
+            if tangokans:
                 i = random.choice(tangokans)
                 self.tangoji = player_tangokans.pop(i)
                 self.show_clue()
                 self.callback = self.use_tangokan
                 self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
             else:
-                msg = _("The {tangomon} offers to teach you a new tangoji. Accept the offer?").format(
-                    tangomon=self.enemy_name)
-                buttons = [_("No"), _("Yes")]
-                r = False
-                if xsge_gui.show_message(gui_handler, message=msg,
-                                         buttons=buttons):
-                    r = add_player_tangoji()
                 self.enemy_run()
-                if r:
-                    self.notification_text = _("New tangoji added!")
                 self.alarms["leave_arena"] = ATTACK_INTERVAL_TIME
         elif alarm_id == "leave_arena":
             self.end_battle()
