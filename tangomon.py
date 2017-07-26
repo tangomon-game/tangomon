@@ -122,8 +122,9 @@ ATTACK_INTERVAL_FAIL_TIME = 8 * FPS
 TANGOJI_ENTRY_TIME = 30 * FPS
 TANGOJI_MULT_START = 1.0
 TANGOJI_MULT_DECREMENT = 0.025
-TANGOJI_MULT_MIN = 0.25
-TANGOJI_MULT_PERSISTENT_MIN = 0.5
+TANGOJI_MULT_MIN = 0.1
+TANGOJI_MULT_PERSISTENT_MIN = 0.25
+TANGOJI_MULT_BULK_BONUS = 0.01
 TANGOJI_MULT_TIME_BONUS = 0.5 / TANGOJI_ENTRY_TIME
 CRITICAL_CHANCE = 0.02
 CRITICAL_MULT = 2
@@ -424,6 +425,10 @@ class Arena(Room):
                 self.tangoji["power"] -= TANGOJI_MULT_DECREMENT
                 self.tangoji["power"] = max(self.tangoji["power"],
                                             TANGOJI_MULT_MIN)
+
+                bulk_bonus = TANGOJI_MULT_BULK_BONUS * len(player_tangojis)
+                self.tangoji_bonus += bulk_bonus
+
                 if ("time_limit" in self.alarms and
                         self.alarms["time_limit"] > 0):
                     self.tangoji_bonus += (self.alarms["time_limit"] *
@@ -1167,8 +1172,9 @@ class ModalMenu(xsge_gui.MenuDialog):
 class WorldmapMenu(ModalMenu):
 
     items = [_("Continue Game"), _("View Statistics"), _("View Tangomon"),
-             _("View Tangoji"), _("Change Tangoji"), _("Create Tangokan"),
-             _("Reset Game"), _("Return to Title Screen")]
+             _("View Tangoji"), _("Add Tangoji"), _("Change Tangoji"),
+             _("Create Tangokan"), _("Reset Game"),
+             _("Return to Title Screen")]
 
     def event_choose(self):
         if self.choice == 1:
@@ -1191,24 +1197,28 @@ class WorldmapMenu(ModalMenu):
             TangojiMenu.create_page()
         elif self.choice == 4:
             play_sound(confirm_sound)
-            ChangeTangojiMenu.create_page()
+            add_player_tangoji()
+            WorldmapMenu.create(default=self.choice)
         elif self.choice == 5:
+            play_sound(confirm_sound)
+            ChangeTangojiMenu.create_page()
+        elif self.choice == 6:
             play_sound(confirm_sound)
             if len(player_tangojis) > TANGOJI_MIN:
                 play_sound(confirm_sound)
                 CreateTangokanMenu.create_page()
             else:
-                msg = _("You don't have enough tangojis in reserve to make a tangokan. You can only create a tangokan if, after spending one of your tangojis to make the tangokan, you have at least {minimum} left over. Fight some tangomon to get more tangojis!").format(minimum=TANGOJI_MIN)
+                msg = _("You don't have enough tangojis in reserve to make a tangokan. You can only create a tangokan if, after spending one of your tangojis to make the tangokan, you have at least {minimum} left over. You can create more tangojis with the \"Add Tangoji\" option.").format(minimum=TANGOJI_MIN)
                 DialogBox(gui_handler, msg).show()
                 WorldmapMenu.create(default=self.choice)
-        elif self.choice == 6:
+        elif self.choice == 7:
             text = _("This will only reset your location and tangomon. Are you sure?")
             buttons = [_("No"), _("Yes")]
             if xsge_gui.show_message(gui_handler, message=text, buttons=buttons):
                 reset_game()
             else:
                 WorldmapMenu.create(default=self.choice)
-        elif self.choice == 7:
+        elif self.choice == 8:
             save_game()
             sge.game.start_room.start()
         else:
@@ -1251,8 +1261,12 @@ class TangojiMenu(ModalMenu):
         elif self.choice is not None and self.choice < len(self.items) - 2:
             play_sound(confirm_sound)
             i = self.current_tangoji[self.choice]
+            word = player_tangojis[i].get("word", "???")
             clue = player_tangojis[i].get("clue", "???")
-            DialogBox(gui_handler, clue).show()
+            power = player_tangojis[i].get("power", TANGOJI_MULT_START)
+            text = _("{word}\n\n{clue}\n\nPower: {power}%").format(
+                word=word, clue=clue, power=int(power * 100))
+            DialogBox(gui_handler, text).show()
             self.create_page(default=self.choice, page=self.page)
         else:
             play_sound(cancel_sound)
@@ -1281,9 +1295,11 @@ class ChangeTangojiMenu(TangojiMenu):
                                                    text=clue)
             if tangoji_clue:
                 player_tangojis[i]["clue"] = tangoji_clue
+
+            WorldmapMenu.create(default=5)
         else:
             play_sound(cancel_sound)
-            WorldmapMenu.create(default=4)
+            WorldmapMenu.create(default=5)
 
 
 class CreateTangokanMenu(TangojiMenu):
