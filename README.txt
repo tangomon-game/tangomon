@@ -53,23 +53,25 @@ tangoji, the more effectiveness the action will have. However, if you
 are incorrect, your tangomon will be confused and not perform the
 action at all.
 
-When you defeat a tangomon, that tangomon will offer to teach you a new
-tangoji. Again, you choose your tangojis if you accept their offer.
-Tangojis degrade in effectiveness over time, so it is in your best
-interest to learn new tangojis as much as possible.
+You can add tangojis to learn through the menu on the map screen.
+Tangojis degrade in effectiveness over time as you successfully use
+them, so it is in your best interest to learn new tangojis as much as
+possible. This is also ideal from a learning perspective.
 
-When you have learned a tangoji, you can convert it to a "tangokan".
-Tangokans are used to convince other tangomon to join your team. At the
-end of a battle, if you have any active tangokans, you will be given the
-opportunity to use one. You will have to correctly give the tangoji used
-to create the tangokan used. If you fail, the tangokan will revert back
-into a tangoji.
+When you have learned a tangoji, you can convert it to a "tangokan" via
+the menu in the map screen accessed by the Enter key. Tangokans are used
+to convince other tangomon to join your team. At the end of a battle, if
+you have any active tangokans, you will be given the opportunity to use
+one. You will have to correctly give the tangoji used to create the
+tangokan used. If you fail, the tangokan will revert back into a
+tangoji.
 
 After using a tangokan, your tangomon will test your memory of it
 several times over the course of the next several months, so make sure
 you really know every tangoji you convert into a tangokan! Any failure
 to pass your tangomon's test will result in that tangomon abandoning
-you.
+you and the old tangoji being added back into your current tangoji
+list.
 
 That's it! See if you can collect all types of tangomon!
 
