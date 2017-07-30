@@ -117,6 +117,7 @@ BASE_POWER_START = 100
 HEALTH_INCREMENT_FACTOR = 1.025
 BASE_POWER_INCREMENT_FACTOR = 1.02
 
+BATTLE_START_WAIT = FPS / 2
 ATTACK_INTERVAL_TIME = 4 * FPS
 ATTACK_INTERVAL_FAIL_TIME = 8 * FPS
 TANGOJI_ENTRY_TIME = 30 * FPS
@@ -324,7 +325,6 @@ class Arena(Room):
 
     def event_room_start(self):
         global player_tangomon
-        global player_tangojections
 
         super(Arena, self).event_room_start()
         self.add(gui_handler)
@@ -380,13 +380,7 @@ class Arena(Room):
             self.player_hp = max(self.player_hp, avg_hp)
             self.player_base_power = max(self.player_base_power, avg_power)
 
-        player_tangojections.sort(key=lambda d: d.get("time"))
-        if (player_tangojections and
-                player_tangojections[0].get("time", time.time()) <= time.time()):
-            self.tangoji = player_tangojections.pop(0)
-            self.alarms["init_tangoject"] = ATTACK_INTERVAL_TIME
-        else:
-            self.alarms["init_player_attack"] = ATTACK_INTERVAL_TIME
+        self.init_tangoject()
 
     def event_step(self, time_passed, delta_mult):
         if self.notification_text:
@@ -399,6 +393,17 @@ class Arena(Room):
                           halign=sge.s.left, valign=sge.s.bottom)
         self.project_text(font_big, str(self.enemy_hp), self.width - 8, y, 0,
                           halign=sge.s.right, valign=sge.s.bottom)
+
+    def init_tangoject(self):
+        global player_tangojections
+
+        player_tangojections.sort(key=lambda d: d.get("time"))
+        if (player_tangojections and
+                player_tangojections[0].get("time", time.time()) <= time.time()):
+            self.tangoji = player_tangojections.pop(0)
+            self.alarms["init_tangoject"] = BATTLE_START_WAIT
+        else:
+            self.alarms["init_player_attack"] = BATTLE_START_WAIT
 
     def reset_state(self):
         self.player_object.image_alpha = 255
@@ -419,8 +424,8 @@ class Arena(Room):
     def evaluate_tangoji(self, time=0):
         if self.tangoji is not None and self.callback is not None:
             word = self.tangoji.get("word", "")
+            self.tangoji.setdefault("power", TANGOJI_MULT_START)
             if self.textbox.text.lower().strip() == word.lower().strip():
-                self.tangoji.setdefault("power", TANGOJI_MULT_START)
                 self.tangoji_bonus = self.tangoji["power"]
                 self.tangoji["power"] -= TANGOJI_MULT_DECREMENT
                 self.tangoji["power"] = max(self.tangoji["power"],
@@ -451,14 +456,20 @@ class Arena(Room):
 
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
-            self.notification_text = _("You passed the test given to you by {tangomon}!").format(
-                tangomon=self.player_name)
             self.tangoji["time"] = (time.time() +
                                     self.tangoji.setdefault("next_time", DAY))
             self.tangoji["next_time"] *= 2
             player_tangojections.append(self.tangoji)
             player_tangojections.sort(key=lambda d: d.get("time"))
-            self.alarms["init_player_attack"] = ATTACK_INTERVAL_TIME
+
+            if (player_tangojections and
+                    player_tangojections[0].get("time", time.time()) <= time.time() and
+                    random.random() < 0.8):
+                self.init_tangoject()
+            else:
+                self.notification_text = _("You passed the test given to you by {tangomon}!").format(
+                    tangomon=self.player_name)
+                self.alarms["init_player_attack"] = ATTACK_INTERVAL_TIME
         else:
             self.notification_text = _("You failed the test given to you by {tangomon}! {tangomon} loses faith in you and \"{tangoji}\" is transformed back into a tangoji!").format(
                 tangomon=self.player_name, tangoji=word)
