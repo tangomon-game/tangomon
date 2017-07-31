@@ -1337,8 +1337,10 @@ class TangomonInfo(xsge_gui.Dialog):
         padding = 8
 
         y = padding
+        name_text = _("#{position}: {tangomon}".format(
+            position=(self.tangomon + 1), tangomon=name))
         name_label = xsge_gui.Label(
-            self, self.width / 2, y, 10, name, font=font_big,
+            self, self.width / 2, y, 10, name_text, font=font_big,
             width=(self.width - 2 * padding), halign=sge.s.center)
 
         y += font.get_height(name) + padding

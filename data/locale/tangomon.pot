@@ -342,6 +342,13 @@ msgid ""
 "be able to use your tangokan to convince a new tangomon to join your team!"
 msgstr ""
 
+# Tangomon name. {position} is replaced by the number of the tangomon,
+# in the order that they were converted (so your starting tangomon is
+# 1, the first tangomon you impressed is 2, and so on). {tangomon} is
+# replaced by the name of the tangomon.
+msgid "#{position}: {tangomon}"
+msgstr ""
+
 # Tangomon info. {hp} is replaced by the tangomon's max HP, {power} is
 # replaced by the tangomon's base power.
 msgid ""
