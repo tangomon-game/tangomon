@@ -467,8 +467,7 @@ class Arena(Room):
             player_tangojections.sort(key=lambda d: d.get("time"))
 
             if (player_tangojections and self.test_num < TEST_LIMIT and
-                    player_tangojections[0].get("time", time.time()) <= time.time() and
-                    random.random() < 0.95):
+                    player_tangojections[0].get("time", time.time()) <= time.time()):
                 self.init_tangoject(TEST_WAIT)
             else:
                 self.notification_text = _("You passed the test given to you by {tangomon}!").format(
@@ -644,7 +643,8 @@ class Arena(Room):
             self.reset_state()
 
             tangokans = get_player_active_tangokans()
-            if tangokans:
+            if tangokans and (self.enemy not in player_tangomon or
+                              random.random() < 0.1):
                 i = random.choice(tangokans)
                 self.tangoji = player_tangokans.pop(i)
                 self.show_clue()
