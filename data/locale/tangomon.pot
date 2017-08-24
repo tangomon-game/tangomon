@@ -329,7 +329,10 @@ msgid ""
 "Active tangoji: {tangoji}\n"
 "Active tangokans: {tangokans}\n"
 "Inactive tangokans: {inactive_tangokans}\n"
-"Completion: {completion}%"
+"Grassland Completion: {grassland_completion}%\n"
+"Forest Completion: {forest_completion}%\n"
+"Dungeon Completion: {dungeon_completion}%\n"
+"Overall Completion: {completion}%"
 msgstr ""
 
 # Menu option: Show the next page in a multi-page menu

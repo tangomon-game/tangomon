@@ -1178,14 +1178,21 @@ class WorldmapMenu(ModalMenu):
 
     def event_choose(self):
         if self.choice == 1:
-            unique_tangomon = len(get_player_unique_tangomon())
+            unique_tangomon = set(player_tangomon)
+            my_tangomon = len(unique_tangomon)
+            my_grassland_tangomon = len(unique_tangomon & grassland_tangomon)
+            my_forest_tangomon = len(unique_tangomon & forest_tangomon)
+            my_dungeon_tangomon = len(unique_tangomon & dungeon_tangomon)
             active_tangokans = len(get_player_active_tangokans())
-            text = _("PLAYER STATISTICS\n\nName: {name}\nTotal tangomon: {tangomon}\nTangomon types: {unique_tangomon}\nActive tangoji: {tangoji}\nActive tangokans: {tangokans}\nInactive tangokans: {inactive_tangokans}\nCompletion: {completion}%").format(
+            text = _("PLAYER STATISTICS\n\nName: {name}\nTotal tangomon: {tangomon}\nTangomon types: {unique_tangomon}\nActive tangoji: {tangoji}\nActive tangokans: {tangokans}\nInactive tangokans: {inactive_tangokans}\nGrassland Completion: {grassland_completion}%\nForest Completion: {forest_completion}%\nDungeon Completion: {dungeon_completion}%\nOverall Completion: {completion}%").format(
                 name=player_name, tangomon=len(player_tangomon),
-                unique_tangomon=unique_tangomon, tangoji=len(player_tangojis),
+                unique_tangomon=my_tangomon, tangoji=len(player_tangojis),
                 tangokans=active_tangokans,
                 inactive_tangokans=(len(player_tangokans) - active_tangokans),
-                completion=int(100 * unique_tangomon / len(get_all_tangomon())))
+                grassland_completion=(int(100 * my_grassland_tangomon / len(grassland_tangomon))),
+                forest_completion=(int(100 * my_forest_tangomon / len(forest_tangomon))),
+                dungeon_completion=(int(100 * my_dungeon_tangomon / len(dungeon_tangomon))),
+                completion=int(100 * my_tangomon / len(get_all_tangomon())))
 
             DialogBox(gui_handler, text).show()
             WorldmapMenu.create(default=self.choice)
