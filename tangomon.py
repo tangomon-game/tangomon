@@ -1432,11 +1432,6 @@ class DialogBox(xsge_gui.Dialog):
 
     def event_press_escape(self):
         self.destroy()
-        room = sge.game.current_room
-        if (isinstance(room, Level) and
-                room.timeline_skip_target is not None and
-                room.timeline_step < room.timeline_skip_target):
-            room.timeline_skipto(room.timeline_skip_target)
 
 
 def get_object(x, y, cls=None, **kwargs):
