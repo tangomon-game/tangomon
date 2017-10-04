@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.1"
+__version__ = "1.1.1a0"
 
 import argparse
 import datetime
@@ -96,7 +96,7 @@ if args.lang:
 SCREEN_SIZE = [640, 480]
 TILE_SIZE = 16
 FPS = 60
-DELTA_MIN = FPS / 10
+DELTA_MIN = FPS / 20
 DELTA_MAX = FPS * 4
 
 KEY_REPEAT_INTERVAL = 20
@@ -753,6 +753,7 @@ class Player(Object, xsge_physics.Collider):
         self.bbox_y = PLAYER_BBOX_Y
         self.bbox_width = PLAYER_BBOX_WIDTH
         self.bbox_height = PLAYER_BBOX_HEIGHT
+        self.checks_collisions = False
 
         view = sge.game.current_room.views[0]
         view.x = self.image_xcenter - view.width / 2
@@ -780,7 +781,7 @@ class Player(Object, xsge_physics.Collider):
             # Check for encounter
             if (not self.collision(SafeZone) and
                     any([random.random() < PLAYER_ENCOUNTER_CHANCE
-                         for j in six.moves.range(int(delta_mult))])):
+                         for j in six.moves.range(max(int(delta_mult), 1))])):
                 dungeon = self.collision(Dungeon)
                 forest = self.collision(Forest)
                 if dungeon:
