@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.1.1a0"
+__version__ = "1.2a0"
 
 import argparse
 import datetime
@@ -144,7 +144,7 @@ MINUTE = 60
 HOUR = 60 * MINUTE
 DAY = 24 * HOUR
 MONTH = 30 * DAY
-TANGOKAN_WAIT_TIME = DAY
+TANGOKAN_WAIT_TIME = 2 * HOUR
 
 first_run = True
 
@@ -1321,7 +1321,7 @@ class CreateTangokanMenu(TangojiMenu):
             i = self.current_tangoji[self.choice]
             tangoji = player_tangojis.pop(i)
             make_tangokan(tangoji)
-            msg = _("New tangokan created! It will activate in 24 hours. At that point, you will be able to use your tangokan to convince a new tangomon to join your team!")
+            msg = _("New tangokan created! It will activate in 2 hours. At that point, you will be able to use your tangokan to convince a new tangomon to join your team!")
             DialogBox(gui_handler, msg).show()
         else:
             play_sound(cancel_sound)
