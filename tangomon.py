@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.2"
+__version__ = "2.0a0"
 
 import argparse
 import datetime
@@ -109,8 +109,19 @@ TANGOJI_LIST_SIZE = 10
 
 TANGOJI_MIN = 3
 
-FOREST_LEVEL_DEPTH = 3
-DUNGEON_LEVEL_DEPTH = 5
+TANGOMON_FAMILIES = [
+    "grassland", "oceanic_abyss", "dark_forest", "haunted_castle",
+    "oasial_crypt", "mountains_of_malevolence", "death_valley",
+    "doom_dungeon"]
+TANGOMON_FAMILY_NAMES = {
+    "grassland": _("Grassland"),
+    "oceanic_abyss": _("Oceanic Abyss"),
+    "dark_forest": _("Dark Forest"),
+    "haunted_castle": _("Haunted Castle"),
+    "oasial_crypt": _("Oasial Crypt"),
+    "mountains_of_malevolence": _("Mountains of Malevolence"),
+    "death_valley": _("Death Valley"),
+    "doom_dungeon": _("Doom Dungeon")}
 
 HEALTH_MAX_START = 500
 BASE_POWER_START = 100
@@ -160,9 +171,7 @@ font = None
 font_small = None
 font_big = None
 loaded_music = {}
-grassland_tangomon = set()
-forest_tangomon = set()
-dungeon_tangomon = set()
+tangomon_sets = {}
 
 current_save_slot = None
 
@@ -176,9 +185,7 @@ player_tangojis = []
 player_tangokans = []
 player_tangomon = []
 player_tangojections = []
-grassland_tangomon_encountered = []
-forest_tangomon_encountered = []
-dungeon_tangomon_encountered = []
+tangomon_encountered = {}
 
 
 class Game(sge.dsp.Game):
@@ -306,7 +313,10 @@ class CharacterChooser(sge.dsp.Room):
 
 class Worldmap(Room):
 
-    """Overworld maps"""
+    """
+    Not actually a worldmap despite the class name; rather it is a
+    selection screen for the different areas.
+    """
 
     def event_key_press(self, key, char):
         if key in {sge.s.escape, sge.s.enter, sge.s.tab}:
@@ -718,209 +728,6 @@ class CreditsScreen(sge.dsp.Room):
             sge.game.start_room.start()
 
 
-class Object(sge.dsp.Object):
-
-    def event_end_step(self, time_passed, delta_mult):
-        self.z = (math.floor(self.z) + 0.5 +
-                  0.24999 * self.image_bottom / sge.game.current_room.height)
-
-
-class Player(Object, xsge_physics.Collider):
-
-    """The player which navigates the overworld."""
-
-    def event_create(self):
-        global player_dest
-        global player_x
-        global player_y
-
-        if player_dest is not None:
-            for obj in sge.game.current_room.objects:
-                if isinstance(obj, Door) and obj.dest == player_dest:
-                    player_x = obj.x
-                    player_y = obj.y
-                    break
-            player_dest = None
-
-        if player_x is not None:
-            self.x = player_x
-        if player_y is not None:
-            self.y = player_y
-
-        self.sprite = character_down_sprites[player_character]
-
-        self.bbox_x = PLAYER_BBOX_X
-        self.bbox_y = PLAYER_BBOX_Y
-        self.bbox_width = PLAYER_BBOX_WIDTH
-        self.bbox_height = PLAYER_BBOX_HEIGHT
-        self.checks_collisions = False
-
-        view = sge.game.current_room.views[0]
-        view.x = self.image_xcenter - view.width / 2
-        view.y = self.image_ycenter - view.height / 2
-
-    def event_step(self, time_passed, delta_mult):
-        global player_x
-        global player_y
-
-        xmove = (sge.keyboard.get_pressed(sge.s.right) -
-                 sge.keyboard.get_pressed(sge.s.left))
-        ymove = (sge.keyboard.get_pressed(sge.s.down) -
-                 sge.keyboard.get_pressed(sge.s.up))
-        if xmove or ymove:
-            xmove *= PLAYER_SPEED * delta_mult
-            ymove *= PLAYER_SPEED * delta_mult
-            if xmove and ymove:
-                xmove *= math.cos(math.radians(45))
-                ymove *= math.sin(math.radians(45))
-            self.move_x(xmove)
-            self.move_y(ymove)
-            player_x = self.x
-            player_y = self.y
-
-            # Check for encounter
-            if (not self.collision(SafeZone) and
-                    any([random.random() < PLAYER_ENCOUNTER_CHANCE
-                         for j in six.moves.range(max(int(delta_mult), 1))])):
-                dungeon = self.collision(Dungeon)
-                forest = self.collision(Forest)
-                if dungeon:
-                    level = dungeon[0].level
-                    max_level = level + DUNGEON_LEVEL_DEPTH
-                    while True:
-                        tangomon = random.choice(list(dungeon_tangomon))
-                        if tangomon in dungeon_tangomon_encountered:
-                            i = dungeon_tangomon_encountered.index(tangomon)
-                            if level <= i <= max_level:
-                                break
-                        elif len(dungeon_tangomon_encountered) - 1 < max_level:
-                            break
-
-                    arena = Arena(tangomon, music="battle_dungeon.ogg")
-                elif forest:
-                    level = forest[0].level
-                    max_level = level + FOREST_LEVEL_DEPTH
-                    while True:
-                        tangomon = random.choice(list(forest_tangomon))
-                        if tangomon in forest_tangomon_encountered:
-                            i = forest_tangomon_encountered.index(tangomon)
-                            if level <= i <= max_level:
-                                break
-                        elif len(forest_tangomon_encountered) - 1 < max_level:
-                            break
-
-                    arena = Arena(tangomon, music="battle.ogg")
-                else:
-                    tangomon = random.choice(list(grassland_tangomon))
-                    arena = Arena(tangomon, music="battle.ogg")
-                arena.start()
-
-            if xmove > 0:
-                self.sprite = character_right_sprites[player_character]
-            elif xmove < 0:
-                self.sprite = character_left_sprites[player_character]
-            elif ymove > 0:
-                self.sprite = character_down_sprites[player_character]
-            elif ymove < 0:
-                self.sprite = character_up_sprites[player_character]
-
-            self.image_fps = None
-        else:
-            self.image_fps = 0
-
-        # Adjust view
-        view = sge.game.current_room.views[0]
-        view.x = self.image_xcenter - view.width / 2
-        view.y = self.image_ycenter - view.height / 2
-
-    def warp(self, dest):
-        global player_map
-        global player_dest
-        global player_x
-        global player_y
-
-        if ":" in dest:
-            player_map, player_dest = dest.split(':', 1)
-        else:
-            player_map = dest
-            player_dest = sge.game.current_room.fname
-
-        player_x = None
-        player_y = None
-
-        load_map()
-
-    def event_physics_collision_left(self, other, move_loss):
-        for door in self.collision(Door):
-            if self.bbox_left == door.bbox_left:
-                self.warp(door.dest)
-
-    def event_physics_collision_right(self, other, move_loss):
-        for door in self.collision(Door):
-            if self.bbox_right == door.bbox_right:
-                self.warp(door.dest)
-
-    def event_physics_collision_top(self, other, move_loss):
-        for door in self.collision(Door):
-            if self.bbox_top == door.bbox_top:
-                self.warp(door.dest)
-
-    def event_physics_collision_bottom(self, other, move_loss):
-        for door in self.collision(Door):
-            if self.bbox_bottom == door.bbox_bottom:
-                self.warp(door.dest)
-
-
-class Solid(xsge_physics.Solid):
-
-    def __init__(self, *args, **kwargs):
-        kwargs.setdefault("visible", False)
-        kwargs.setdefault("checks_collisions", False)
-        super(Solid, self).__init__(*args, **kwargs)
-
-
-class Door(sge.dsp.Object):
-
-    """Warps player to another door."""
-
-    def __init__(self, x, y, z=0, dest=None, spawn_id=None, **kwargs):
-        self.dest = dest
-        self.spawn_id = spawn_id
-        if dest and not spawn_id:
-            if ':' in dest:
-                self.spawn_id, i = dest.split(':', 1)
-            else:
-                self.spawn_id = dest
-
-        kwargs.setdefault("visible", False)
-        kwargs.setdefault("checks_collisions", False)
-        super(Door, self).__init__(x, y, z=z, **kwargs)
-
-
-class SpecialZone(sge.dsp.Object):
-
-    def __init__(self, x, y, z=0, level=0, **kwargs):
-        self.level = level
-        kwargs.setdefault("visible", False)
-        kwargs.setdefault("checks_collisions", False)
-        super(SpecialZone, self).__init__(x, y, z=z, **kwargs)
-
-
-class SafeZone(SpecialZone):
-
-    """Area where no encounters will happen."""
-
-
-class Forest(SpecialZone):
-
-    """Forest area (as opposed to grassland)"""
-
-
-class Dungeon(SpecialZone):
-
-    """Dungeon area (as opposed to grassland)"""
-
-
 class FontChooser(xsge_gui.Dialog):
 
     """Screen shown at the start of the game to choose the font."""
@@ -1181,18 +988,12 @@ class WorldmapMenu(ModalMenu):
         if self.choice == 1:
             unique_tangomon = set(player_tangomon)
             my_tangomon = len(unique_tangomon)
-            my_grassland_tangomon = len(unique_tangomon & grassland_tangomon)
-            my_forest_tangomon = len(unique_tangomon & forest_tangomon)
-            my_dungeon_tangomon = len(unique_tangomon & dungeon_tangomon)
             active_tangokans = len(get_player_active_tangokans())
-            text = _("PLAYER STATISTICS\n\nName: {name}\nTotal tangomon: {tangomon}\nTangomon types: {unique_tangomon}\nActive tangoji: {tangoji}\nActive tangokans: {tangokans}\nInactive tangokans: {inactive_tangokans}\nGrassland Completion: {grassland_completion}%\nForest Completion: {forest_completion}%\nDungeon Completion: {dungeon_completion}%\nOverall Completion: {completion}%").format(
+            text = _("PLAYER STATISTICS\n\nName: {name}\nTotal tangomon: {tangomon}\nTangomon types: {unique_tangomon}\nActive tangoji: {tangoji}\nActive tangokans: {tangokans}\nInactive tangokans: {inactive_tangokans}\nCompletion: {completion}%").format(
                 name=player_name, tangomon=len(player_tangomon),
                 unique_tangomon=my_tangomon, tangoji=len(player_tangojis),
                 tangokans=active_tangokans,
                 inactive_tangokans=(len(player_tangokans) - active_tangokans),
-                grassland_completion=(int(100 * my_grassland_tangomon / len(grassland_tangomon))),
-                forest_completion=(int(100 * my_forest_tangomon / len(forest_tangomon))),
-                dungeon_completion=(int(100 * my_dungeon_tangomon / len(dungeon_tangomon))),
                 completion=int(100 * my_tangomon / len(get_all_tangomon())))
 
             DialogBox(gui_handler, text).show()
@@ -1445,7 +1246,7 @@ def get_tangomon_name(tangomon):
 
 
 def get_all_tangomon():
-    return grassland_tangomon | forest_tangomon | dungeon_tangomon
+    return set(itertools.chain.from_iterable(tangomon_sets.items()))
 
 
 def get_player_unique_tangomon():
@@ -1483,79 +1284,55 @@ def schedule_tangojection(tangokan):
 
 
 def get_tangomon_sprite(tangomon):
-    if tangomon in grassland_tangomon:
-        d = os.path.join(DATA, "images", "tangomon", "grassland")
-    elif tangomon in forest_tangomon:
-        d = os.path.join(DATA, "images", "tangomon", "forest")
-    elif tangomon in dungeon_tangomon:
-        d = os.path.join(DATA, "images", "tangomon", "dungeon")
-    else:
-        warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
-        return None
+    for i in tangomon_sets:
+        if tangomon in tangomon_sets[i]:
+            d = os.path.join(DATA, "images", "tangomon", i)
+            return sge.gfx.Sprite(tangomon, d)
 
-    return sge.gfx.Sprite(tangomon, d)
+    warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
+    return None
 
 
 def evaluate_tangomon(tangomon):
-    if tangomon in grassland_tangomon:
-        if tangomon not in grassland_tangomon_encountered:
-            grassland_tangomon_encountered.append(tangomon)
-    elif tangomon in forest_tangomon:
-        if tangomon not in forest_tangomon_encountered:
-            forest_tangomon_encountered.append(tangomon)
-    elif tangomon in dungeon_tangomon:
-        if tangomon not in dungeon_tangomon_encountered:
-            dungeon_tangomon_encountered.append(tangomon)
+    for i in tangomon_sets:
+        if tangomon in tangomon_sets[i]:
+            assert i in tangomon_encountered
+            tangomon_encountered[i].append(tangomon)
+            return
+
+    warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
 
 
 def get_tangomon_hp_max(tangomon):
-    if tangomon in grassland_tangomon:
-        if tangomon not in grassland_tangomon_encountered:
-            grassland_tangomon_encountered.append(tangomon)
+    for i in tangomon_sets:
+        if tangomon in tangomon_sets[i]:
+            assert i in TANGOMON_FAMILIES and i in tangomon_encountered
+            if tangomon not in tangomon_encountered[i]:
+                tangomon_encountered[i].append(tangomon)
 
-        i = grassland_tangomon_encountered.index(tangomon)
-        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
-    elif tangomon in forest_tangomon:
-        if tangomon not in forest_tangomon_encountered:
-            forest_tangomon_encountered.append(tangomon)
+            j = tangomon_encountered[i].index(tangomon)
+            for k in TANGOMON_FAMILIES[:TANGOMON_FAMILIES.index(i)]:
+                j += len(tangomon_sets[i])
+            return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
 
-        i = forest_tangomon_encountered.index(tangomon)
-        i += len(grassland_tangomon)
-        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
-    elif tangomon in dungeon_tangomon:
-        if tangomon not in dungeon_tangomon_encountered:
-            dungeon_tangomon_encountered.append(tangomon)
-
-        i = dungeon_tangomon_encountered.index(tangomon)
-        i += len(grassland_tangomon) + len(forest_tangomon)
-        return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
-    else:
-        return 1
+    warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
+    return 1
 
 
 def get_tangomon_base_power(tangomon):
-    if tangomon in grassland_tangomon:
-        if tangomon not in grassland_tangomon_encountered:
-            grassland_tangomon_encountered.append(tangomon)
+    for i in tangomon_sets:
+        if tangomon in tangomon_sets[i]:
+            assert i in TANGOMON_FAMILIES and i in tangomon_encountered
+            if tangomon not in tangomon_encountered[i]:
+                tangomon_encountered[i].append(tangomon)
 
-        i = grassland_tangomon_encountered.index(tangomon)
-        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
-    elif tangomon in forest_tangomon:
-        if tangomon not in forest_tangomon_encountered:
-            forest_tangomon_encountered.append(tangomon)
+            j = tangomon_encountered[i].index(tangomon)
+            for k in TANGOMON_FAMILIES[:TANGOMON_FAMILIES.index(i)]:
+                j += len(tangomon_sets[i])
+            return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
 
-        i = forest_tangomon_encountered.index(tangomon)
-        i += len(grassland_tangomon)
-        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
-    elif tangomon in dungeon_tangomon:
-        if tangomon not in dungeon_tangomon_encountered:
-            dungeon_tangomon_encountered.append(tangomon)
-
-        i = dungeon_tangomon_encountered.index(tangomon)
-        i += len(grassland_tangomon) + len(forest_tangomon)
-        return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
-    else:
-        return 1
+    warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
+    return 1
 
 
 def give_player_tangomon(tangomon):
@@ -1647,16 +1424,14 @@ def reset_game():
     global player_x
     global player_y
     global player_tangomon
-    global grassland_tangomon_encountered
-    global forest_tangomon_encountered
-    global dungeon_tangomon_encountered
+    global tangomon_encountered
     player_map = None
     player_x = None
     player_y = None
     player_tangomon = []
-    grassland_tangomon_encountered = []
-    forest_tangomon_encountered = []
-    dungeon_tangomon_encountered = []
+    tangomon_encountered = {}
+    for i in TANGOMON_FAMILIES:
+        tangomon_encountered[i] = []
     load_map()
 
 
@@ -1670,9 +1445,7 @@ def new_game():
     global player_tangokans
     global player_tangomon
     global player_tangojections
-    global grassland_tangomon_encountered
-    global forest_tangomon_encountered
-    global dungeon_tangomon_encountered
+    global tangomon_encountered
     text = _("What is your name?")
     player_name = None
     while not player_name:
@@ -1685,9 +1458,9 @@ def new_game():
     player_tangokans = []
     player_tangomon = []
     player_tangojections = []
-    grassland_tangomon_encountered = []
-    forest_tangomon_encountered = []
-    dungeon_tangomon_encountered = []
+    tangomon_encountered = {}
+    for i in TANGOMON_FAMILIES:
+        tangomon_encountered[i] = []
     CharacterChooser().start()
 
 
@@ -1705,9 +1478,7 @@ def save_game():
                 "player_tangokans": player_tangokans,
                 "player_tangomon": player_tangomon,
                 "player_tangojections": player_tangojections,
-                "grassland_tangomon_encountered": grassland_tangomon_encountered,
-                "forest_tangomon_encountered": forest_tangomon_encountered,
-                "dungeon_tangomon_encountered": dungeon_tangomon_encountered}
+                "tangomon_encountered": tangomon_encountered}
 
         write_to_disk()
 
@@ -1722,9 +1493,7 @@ def load_game():
     global player_tangokans
     global player_tangomon
     global player_tangojections
-    global grassland_tangomon_encountered
-    global forest_tangomon_encountered
-    global dungeon_tangomon_encountered
+    global tangomon_encountered
 
     if (current_save_slot is not None and
             save_slots[current_save_slot] is not None):
@@ -1738,9 +1507,10 @@ def load_game():
         player_tangokans = slot.get("player_tangokans", [])
         player_tangomon = slot.get("player_tangomon", [])
         player_tangojections = slot.get("player_tangojections", [])
-        grassland_tangomon_encountered = slot.get("grassland_tangomon_encountered", [])
-        forest_tangomon_encountered = slot.get("forest_tangomon_encountered", [])
-        dungeon_tangomon_encountered = slot.get("dungeon_tangomon_encountered", [])
+        tangomon_encountered = {}
+        for i in TANGOMON_FAMILIES:
+            tangomon_encountered[i] = []
+        tangomon_encountered = slot.get("tangomon_encountered", tangomon_encountered)
 
         if slot.get("version", 0) < 1:
             tjs = list(set([(d["word"], d["clue"]) for d in player_tangojections]))
@@ -1773,10 +1543,11 @@ def load_map():
     global player_y
 
     if not player_tangomon:
-        if grassland_tangomon_encountered:
-            player_tangomon.append(grassland_tangomon_encountered[0])
+        family = TANGOMON_FAMILIES[0]
+        if tangomon_encountered[family]:
+            player_tangomon.append(tangomon_encountered[family][0])
         else:
-            player_tangomon.append(random.choice(list(grassland_tangomon)))
+            player_tangomon.append(random.choice(list(tangomon_sets[family])))
 
         player_map = None
         player_x = None
@@ -1872,35 +1643,16 @@ d = os.path.join(DATA, "images", "misc")
 logo_sprite = sge.gfx.Sprite("logo", d, origin_x=300)
 
 # Find tangomon
-d = os.path.join(DATA, "images", "tangomon", "grassland")
-for fname in os.listdir(d):
-    root, ext = os.path.splitext(fname)
-    try:
-        sprite = sge.gfx.Sprite(root, d)
-    except (IOError, OSError):
-        pass
-    else:
-        grassland_tangomon.add(root)
-
-d = os.path.join(DATA, "images", "tangomon", "forest")
-for fname in os.listdir(d):
-    root, ext = os.path.splitext(fname)
-    try:
-        sprite = sge.gfx.Sprite(root, d)
-    except (IOError, OSError):
-        pass
-    else:
-        forest_tangomon.add(root)
-
-d = os.path.join(DATA, "images", "tangomon", "dungeon")
-for fname in os.listdir(d):
-    root, ext = os.path.splitext(fname)
-    try:
-        sprite = sge.gfx.Sprite(root, d)
-    except (IOError, OSError):
-        pass
-    else:
-        dungeon_tangomon.add(root)
+for family in TANGOMON_FAMILIES:
+    d = os.path.join(DATA, "images", "tangomon", family)
+    for fname in os.listdir(d):
+        root, ext = os.path.splitext(fname)
+        try:
+            sprite = sge.gfx.Sprite(root, d)
+        except (IOError, OSError):
+            pass
+        else:
+            tangomon_sets[family].add(root)
 
 # Create fonts
 create_fonts()
