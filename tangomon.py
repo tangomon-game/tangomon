@@ -25,6 +25,7 @@ __version__ = "2.0a0"
 import argparse
 import datetime
 import gettext
+import itertools
 import json
 import math
 import os
