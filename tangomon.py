@@ -36,8 +36,6 @@ import webbrowser
 import sge
 import six
 import xsge_gui
-import xsge_physics
-import xsge_tmx
 
 
 DATA = os.path.join(os.path.dirname(__file__), "data")
@@ -109,11 +107,11 @@ TANGOJI_LIST_SIZE = 10
 
 TANGOJI_MIN = 3
 
-TANGOMON_FAMILIES = [
+ZONES = [
     "grassland", "oceanic_abyss", "dark_forest", "haunted_castle",
     "oasial_crypt", "mountains_of_malevolence", "death_valley",
     "doom_dungeon"]
-TANGOMON_FAMILY_NAMES = {
+ZONE_NAMES = {
     "grassland": _("Grassland"),
     "oceanic_abyss": _("Oceanic Abyss"),
     "dark_forest": _("Dark Forest"),
@@ -122,6 +120,15 @@ TANGOMON_FAMILY_NAMES = {
     "mountains_of_malevolence": _("Mountains of Malevolence"),
     "death_valley": _("Death Valley"),
     "doom_dungeon": _("Doom Dungeon")}
+ZONE_MUSIC = {
+    "grassland": "battle.ogg",
+    "oceanic_abyss": "battle.ogg",
+    "dark_forest": "battle.ogg",
+    "haunted_castle": "battle_dungeon.ogg",
+    "oasial_crypt": "battle_dungeon.ogg",
+    "mountains_of_malevolence": "battle.ogg",
+    "death_valley": "battle.ogg",
+    "doom_dungeon": "battle_dungeon.ogg"}
 
 HEALTH_MAX_START = 500
 BASE_POWER_START = 100
@@ -176,11 +183,7 @@ tangomon_sets = {}
 current_save_slot = None
 
 player_name = None
-player_character = 0
-player_map = None
-player_dest = None
-player_x = None
-player_y = None
+player_zone = 0
 player_tangojis = []
 player_tangokans = []
 player_tangomon = []
@@ -258,6 +261,9 @@ class TitleScreen(Room):
             first_run = False
             write_to_disk()
 
+        sge.dsp.Object.create(self.width / 2, 16, sprite=logo_sprite,
+                              tangible=False)
+
         self.menu = MainMenu.create()
 
     def event_room_resume(self):
@@ -267,59 +273,88 @@ class TitleScreen(Room):
             self.menu = MainMenu.create()
 
 
-class CharacterChooser(sge.dsp.Room):
-
-    """Character selection screen."""
-
-    def set_sprite(self):
-        self.character_obj.sprite = character_down_sprites[player_character]
-        self.character_obj.image_fps = None
-
-    def event_room_start(self):
-        padding = 8
-        text = _("Please use the left and right arrow keys to select your character. When you are finished, press the Enter key.")
-        text_sprite = sge.gfx.Sprite.from_text(
-            font, text, width=self.width - 2 * padding, halign=sge.s.center)
-        text_obj = sge.dsp.Object.create(self.width / 2, padding,
-                                         sprite=text_sprite)
-
-        y = text_sprite.height + 2 * padding
-        target_w = self.width - 2 * padding
-        target_h = self.height - text_sprite.height - 3 * padding
-        s = character_down_sprites[player_character]
-        scale = min(target_w / s.width, target_h / s.height)
-        x = self.width / 2 - scale * s.width / 2
-        self.character_obj = sge.dsp.Object.create(x, y, image_xscale=scale,
-                                                   image_yscale=scale)
-        self.set_sprite()
-
-    def event_key_press(self, key, char):
-        global player_character
-
-        if key == sge.s.left:
-            play_sound(select_sound)
-            player_character -= 1
-            player_character %= len(character_down_sprites)
-            self.set_sprite()
-        elif key == sge.s.right:
-            play_sound(select_sound)
-            player_character += 1
-            player_character %= len(character_down_sprites)
-            self.set_sprite()
-        elif key in {sge.s.enter, sge.s.kp_enter}:
-            play_sound(confirm_sound)
-            load_map()
-
-
 class Worldmap(Room):
 
     """
-    Not actually a worldmap despite the class name; rather it is a
-    selection screen for the different areas.
+    Selection screen for the different zones.
     """
+    
+    zone_w = 240
+    zone_h = 240
+
+    def event_room_start(self):
+        super(Worldmap, self).event_room_start()
+
+        zone_w = self.zone_w
+        zone_h = self.zone_h
+        unknown_zone_sprite = sge.gfx.Sprite(
+            width=zone_w, height=zone_h, origin_x=(zone_w / 2),
+            origin_y=(zone_h / 2))
+        unknown_zone_sprite.draw_text(
+            font_big, "?", zone_w / 2, zone_h / 2, halign=sge.s.center,
+            valign=sge.s.middle)
+        unknown_zone_sprite.draw_rectangle(
+            0, 0, zone_w, zone_h, outline=sge.gfx.Color(sge.s.white))
+        self.zone_sprites = []
+        d = os.path.join(DATA, "images", "zones")
+        for zone in ZONES:
+            new_sprite = unknown_zone_sprite
+            try:
+                new_sprite = sge.gfx.Sprite(
+                    zone, d, width=zone_w, height=zone_h,
+                    origin_x=(zone_w / 2), origin_y=(zone_h / 2))
+            except (IOError, OSError):
+                pass
+            else:
+                new_sprite.draw_rectangle(
+                    0, 0, zone_w, zone_h,
+                    outline=sge.gfx.Color(sge.s.white))
+
+            self.zone_sprites.append(new_sprite)
+
+    def event_step(self, time_passed, delta_mult):
+        zone_distance = self.zone_w + 16
+        text_distance = self.zone_h / 2 + 8
+        x = self.width / 2 - player_zone * zone_distance
+        y = self.height / 2
+        name_y = y - text_distance
+        progress_y = y + text_distance
+        unique_tangomon = set(player_tangomon)
+        tangomon_caught = {}
+        for zone in ZONES:
+            tangomon_caught[zone] = len(unique_tangomon & tangomon_sets[zone])
+
+        for i in six.moves.range(len(self.zone_sprites)):
+            zone = ZONES[i]
+            zone_sprite = self.zone_sprites[i]
+            self.project_sprite(zone_sprite, 0, x, y, 0)
+            self.project_text(font, ZONE_NAMES[zone], x, name_y, 0,
+                              halign=sge.s.center, valign=sge.s.bottom)
+            caught = tangomon_caught[zone]
+            avail = len(tangomon_sets[zone])
+            prog_text = "{}/{} ({}%)".format(
+                caught, avail, int(100 * caught / avail))
+            self.project_text(font, prog_text, x, progress_y, 0,
+                              halign=sge.s.center, valign=sge.s.top)
+            x += zone_distance
 
     def event_key_press(self, key, char):
-        if key in {sge.s.escape, sge.s.enter, sge.s.tab}:
+        global player_zone
+
+        if key == sge.s.left:
+            play_sound(select_sound)
+            player_zone -= 1
+            player_zone %= len(ZONES)
+        elif key == sge.s.right:
+            play_sound(select_sound)
+            player_zone += 1
+            player_zone %= len(ZONES)
+        elif key in {sge.s.space, sge.s.up, sge.s.down, sge.s.end}:
+            zone = ZONES[player_zone]
+            tangomon = random.choice(list(tangomon_sets[zone]))
+            arena = Arena(tangomon, music=ZONE_MUSIC[zone])
+            arena.start()
+        elif key in {sge.s.escape, sge.s.enter, sge.s.tab, sge.s.backspace}:
             WorldmapMenu.create()
 
 
@@ -1236,11 +1271,6 @@ class DialogBox(xsge_gui.Dialog):
         self.destroy()
 
 
-def get_object(x, y, cls=None, **kwargs):
-    cls = TYPES.get(cls, xsge_tmx.Decoration)
-    return cls(x, y, **kwargs)
-
-
 def get_tangomon_name(tangomon):
     return tangomon.replace("_", " ").title()
 
@@ -1306,14 +1336,14 @@ def evaluate_tangomon(tangomon):
 def get_tangomon_hp_max(tangomon):
     for i in tangomon_sets:
         if tangomon in tangomon_sets[i]:
-            assert i in TANGOMON_FAMILIES and i in tangomon_encountered
+            assert i in ZONES and i in tangomon_encountered
             if tangomon not in tangomon_encountered[i]:
                 tangomon_encountered[i].append(tangomon)
 
             j = tangomon_encountered[i].index(tangomon)
-            for k in TANGOMON_FAMILIES[:TANGOMON_FAMILIES.index(i)]:
+            for k in ZONES[:ZONES.index(i)]:
                 j += len(tangomon_sets[i])
-            return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** i))
+            return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** j))
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
     return 1
@@ -1322,14 +1352,14 @@ def get_tangomon_hp_max(tangomon):
 def get_tangomon_base_power(tangomon):
     for i in tangomon_sets:
         if tangomon in tangomon_sets[i]:
-            assert i in TANGOMON_FAMILIES and i in tangomon_encountered
+            assert i in ZONES and i in tangomon_encountered
             if tangomon not in tangomon_encountered[i]:
                 tangomon_encountered[i].append(tangomon)
 
             j = tangomon_encountered[i].index(tangomon)
-            for k in TANGOMON_FAMILIES[:TANGOMON_FAMILIES.index(i)]:
+            for k in ZONES[:ZONES.index(i)]:
                 j += len(tangomon_sets[i])
-            return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** i)
+            return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** j)
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
     return 1
@@ -1420,27 +1450,20 @@ def create_fonts():
 
 
 def reset_game():
-    global player_map
-    global player_x
-    global player_y
+    global player_zone
     global player_tangomon
     global tangomon_encountered
-    player_map = None
-    player_x = None
-    player_y = None
+    player_zone = 0
     player_tangomon = []
     tangomon_encountered = {}
-    for i in TANGOMON_FAMILIES:
+    for i in ZONES:
         tangomon_encountered[i] = []
     load_map()
 
 
 def new_game():
     global player_name
-    global player_character
-    global player_map
-    global player_x
-    global player_y
+    global player_zone
     global player_tangojis
     global player_tangokans
     global player_tangomon
@@ -1450,18 +1473,15 @@ def new_game():
     player_name = None
     while not player_name:
         player_name = xsge_gui.get_text_entry(gui_handler, message=text)
-    player_character = 0
-    player_map = None
-    player_x = None
-    player_y = None
+    player_zone = 0
     player_tangojis = []
     player_tangokans = []
     player_tangomon = []
     player_tangojections = []
     tangomon_encountered = {}
-    for i in TANGOMON_FAMILIES:
+    for i in ZONES:
         tangomon_encountered[i] = []
-    CharacterChooser().start()
+    load_map()
 
 
 def save_game():
@@ -1472,9 +1492,7 @@ def save_game():
             save_slots[current_save_slot] = {
                 "version": 1,
                 "player_name": player_name,
-                "player_character": player_character,
-                "player_map": player_map, "player_x": player_x,
-                "player_y": player_y, "player_tangojis": player_tangojis,
+                "player_zone": player_zone, "player_tangojis": player_tangojis,
                 "player_tangokans": player_tangokans,
                 "player_tangomon": player_tangomon,
                 "player_tangojections": player_tangojections,
@@ -1485,10 +1503,7 @@ def save_game():
 
 def load_game():
     global player_name
-    global player_character
-    global player_map
-    global player_x
-    global player_y
+    global player_zone
     global player_tangojis
     global player_tangokans
     global player_tangomon
@@ -1499,16 +1514,13 @@ def load_game():
             save_slots[current_save_slot] is not None):
         slot = save_slots[current_save_slot]
         player_name = slot.get("player_name")
-        player_character = slot.get("player_character", 0)
-        player_map = slot.get("player_map")
-        player_x = slot.get("player_x")
-        player_y = slot.get("player_y")
+        player_zone = slot.get("player_zone", 0)
         player_tangojis = slot.get("player_tangojis", [])
         player_tangokans = slot.get("player_tangokans", [])
         player_tangomon = slot.get("player_tangomon", [])
         player_tangojections = slot.get("player_tangojections", [])
         tangomon_encountered = {}
-        for i in TANGOMON_FAMILIES:
+        for i in ZONES:
             tangomon_encountered[i] = []
         tangomon_encountered = slot.get("tangomon_encountered", tangomon_encountered)
 
@@ -1538,23 +1550,12 @@ def load_game():
 
 
 def load_map():
-    global player_map
-    global player_x
-    global player_y
-
     if not player_tangomon:
-        family = TANGOMON_FAMILIES[0]
-        if tangomon_encountered[family]:
-            player_tangomon.append(tangomon_encountered[family][0])
+        zone = ZONES[0]
+        if tangomon_encountered[zone]:
+            player_tangomon.append(tangomon_encountered[zone][0])
         else:
-            player_tangomon.append(random.choice(list(tangomon_sets[family])))
-
-        player_map = None
-        player_x = None
-        player_y = None
-
-    if player_map is None:
-        player_map = "0.tmx"
+            player_tangomon.append(random.choice(list(tangomon_sets[zone])))
 
     while len(player_tangojis) < TANGOJI_MIN:
         r = add_player_tangoji()
@@ -1562,9 +1563,7 @@ def load_map():
             text = _("You must add a tangoji to continue.")
             DialogBox(gui_handler, text).show()
 
-    room = xsge_tmx.load(os.path.join(DATA, "worldmaps", player_map),
-                         cls=Worldmap, types=TYPES)
-    room.fname = player_map
+    room = Worldmap(music="overworld.ogg")
     room.start()
 
 
@@ -1581,11 +1580,6 @@ def write_to_disk():
 
         with open(os.path.join(CONFIG, "save_slots.json"), 'w') as f:
             json.dump(save_slots, f, indent=4)
-
-
-TYPES = {"objects": get_object, "player": Player,
-         "solid": Solid, "door": Door, "safe_zone": SafeZone, "forest": Forest,
-         "dungeon": Dungeon}
 
 
 print(_("Initializing game system..."))
@@ -1609,42 +1603,13 @@ menu_color = sge.gfx.Color("black")
 print(_("Loading media..."))
 
 # Load sprites
-fname = os.path.join(DATA, "images", "objects", "characters.png")
-character_down_sprites = [
-    sge.gfx.Sprite.from_tileset(fname, 64, 0, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 128, 0, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 192, 0, columns=4, width=16, height=16,
-                                fps=10)]
-character_left_sprites = [
-    sge.gfx.Sprite.from_tileset(fname, 64, 16, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 128, 16, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 192, 16, columns=4, width=16, height=16,
-                                fps=10)]
-character_right_sprites = [
-    sge.gfx.Sprite.from_tileset(fname, 64, 32, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 128, 32, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 192, 32, columns=4, width=16, height=16,
-                                fps=10)]
-character_up_sprites = [
-    sge.gfx.Sprite.from_tileset(fname, 64, 48, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 128, 48, columns=4, width=16, height=16,
-                                fps=10),
-    sge.gfx.Sprite.from_tileset(fname, 192, 48, columns=4, width=16, height=16,
-                                fps=10)]
-
 d = os.path.join(DATA, "images", "misc")
 logo_sprite = sge.gfx.Sprite("logo", d, origin_x=300)
 
 # Find tangomon
-for family in TANGOMON_FAMILIES:
-    d = os.path.join(DATA, "images", "tangomon", family)
+for zone in ZONES:
+    tangomon_sets[zone] = set()
+    d = os.path.join(DATA, "images", "tangomon", zone)
     for fname in os.listdir(d):
         root, ext = os.path.splitext(fname)
         try:
@@ -1652,7 +1617,7 @@ for family in TANGOMON_FAMILIES:
         except (IOError, OSError):
             pass
         else:
-            tangomon_sets[family].add(root)
+            tangomon_sets[zone].add(root)
 
 # Create fonts
 create_fonts()
@@ -1668,8 +1633,7 @@ cancel_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "cancel.wav"))
 type_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "type.wav"))
 
 # Create rooms
-sge.game.start_room = xsge_tmx.load(os.path.join(DATA, "screens", "title.tmx"),
-                                    cls=TitleScreen)
+sge.game.start_room = TitleScreen()
 
 if not os.path.exists(CONFIG):
     os.makedirs(CONFIG)

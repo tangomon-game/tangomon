@@ -19,7 +19,7 @@
 #, fuzzy
 msgid ""
 msgstr ""
-"Project-Id-Version: 1.2\n"
+"Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
 "POT-Creation-Date: 2017-06-18 08:30-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
@@ -52,11 +52,32 @@ msgstr ""
 msgid "Where to load the game data from (Default: \"{}\")"
 msgstr ""
 
-# Character selection screen instructions
-msgid ""
-"Please use the left and right arrow keys to select your character. When you "
-"are finished, press the Enter key."
+
+# Zone names
+msgid "Grassland"
 msgstr ""
+
+msgid "Oceanic Abyss"
+msgstr ""
+
+msgid "Dark Forest"
+msgstr ""
+
+msgid "Haunted Castle"
+msgstr ""
+
+msgid "Oasial Crypt"
+msgstr ""
+
+msgid "Mountains of Malevolence"
+msgstr ""
+
+msgid "Death Valley"
+msgstr ""
+
+msgid "Doom Dungeon"
+msgstr ""
+
 
 # Shown when the player passes a loyalty test given by their own
 # tangomon. {tangomon} is replaced with the name of the tangomon.
@@ -329,10 +350,7 @@ msgid ""
 "Active tangoji: {tangoji}\n"
 "Active tangokans: {tangokans}\n"
 "Inactive tangokans: {inactive_tangokans}\n"
-"Grassland Completion: {grassland_completion}%\n"
-"Forest Completion: {forest_completion}%\n"
-"Dungeon Completion: {dungeon_completion}%\n"
-"Overall Completion: {completion}%"
+"Completion: {completion}%"
 msgstr ""
 
 # Menu option: Show the next page in a multi-page menu

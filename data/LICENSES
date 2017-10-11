@@ -7,9 +7,9 @@ information.
 
 ========================================================================
 
-images/tangomon/dungeon/angler.png
-images/tangomon/dungeon/naga.png
-images/tangomon/forest/derg.png
+images/tangomon/dark_forest/naga.png
+images/tangomon/haunted_castle/angler.png
+images/tangomon/mountains_of_malevolence/derg.png
 
 Authors:
   Stephen "Redshrike" Challener (Sprites) 5hiroi (concepts)
@@ -19,11 +19,11 @@ Source: https://opengameart.org/content/3-rpg-enemy-remixes
 
 ------------------------------------------------------------------------
 
-images/tangomon/dungeon/desemon.png
-images/tangomon/dungeon/ishior.png
-images/tangomon/dungeon/kinek.png
-images/tangomon/dungeon/midoku.png
-images/tangomon/dungeon/miseta.png
+images/tangomon/doom_dungeon/kinek.png
+images/tangomon/haunted_castle/desemon.png
+images/tangomon/mountains_of_malevolence/ishior.png
+images/tangomon/mountains_of_malevolence/midoku.png
+images/tangomon/oasial_crypt/miseta.png
 
 Authors:
   Stephen Challener (Redshrike), Blarumyrran and LordNeo, hosted by OpenGameArt.org
@@ -32,30 +32,30 @@ Source: https://opengameart.org/content/6-more-rpg-enemies
 
 ------------------------------------------------------------------------
 
-images/tangomon/dungeon/allijinn.png
-images/tangomon/dungeon/chimi.png
-images/tangomon/dungeon/ganachnid.png
-images/tangomon/dungeon/honewani.png
-images/tangomon/dungeon/inma.png
-images/tangomon/dungeon/kapochaku.png
-images/tangomon/dungeon/kesholem.png
-images/tangomon/dungeon/mangi.png
-images/tangomon/dungeon/mastonin.png
-images/tangomon/dungeon/nawaki.png
-images/tangomon/dungeon/okorupus.png
-images/tangomon/dungeon/pterakatsu.png
-images/tangomon/dungeon/shindaurus.png
-images/tangomon/dungeon/trillio.png
-images/tangomon/dungeon/udeshi.png
-images/tangomon/forest/hunchard.png
-images/tangomon/forest/metopus.png
-images/tangomon/forest/osoppa.png
-images/tangomon/forest/wolinite.png
+images/tangomon/dark_forest/wolinite.png
+images/tangomon/death_valley/honewani.png
+images/tangomon/death_valley/mastonin.png
+images/tangomon/death_valley/pterakatsu.png
+images/tangomon/death_valley/shindaurus.png
+images/tangomon/death_valley/trillio.png
+images/tangomon/doom_dungeon/ganachnid.png
+images/tangomon/doom_dungeon/udeshi.png
 images/tangomon/grassland/exolcon.png
 images/tangomon/grassland/kusagon.png
-images/tangomon/grassland/lobsite.png
 images/tangomon/grassland/midachi.png
 images/tangomon/grassland/rombin.png
+images/tangomon/haunted_castle/chimi.png
+images/tangomon/haunted_castle/inma.png
+images/tangomon/haunted_castle/kapochaku.png
+images/tangomon/haunted_castle/nawaki.png
+images/tangomon/mountains_of_malevolence/kesholem.png
+images/tangomon/oasial_crypt/hunchard.png
+images/tangomon/oasial_crypt/mangi.png
+images/tangomon/oasial_crypt/okorupus.png
+images/tangomon/oceanic_abyss/allijinn.png
+images/tangomon/oceanic_abyss/lobsite.png
+images/tangomon/oceanic_abyss/metopus.png
+images/tangomon/oceanic_abyss/osoppa.png
 
 Author: Stephen Challener (Redshrike), hosted by OpenGameArt.org
 License: CC BY 3.0 <http://creativecommons.org/licenses/by/3.0/>
@@ -71,7 +71,7 @@ Sources:
 
 ------------------------------------------------------------------------
 
-images/tangomon/forest/niwatorolisk.png
+images/tangomon/dark_forest/niwatorolisk.png
 
 Authors:
   Blarumyrran <https://opengameart.org/user/404>
@@ -82,14 +82,14 @@ Source: https://opengameart.org/content/rpg-enemy-basilisk-ff6-ish-style
 ------------------------------------------------------------------------
 
 images/misc/icon.png
-images/tangomon/dungeon/hadakyu.png
-images/tangomon/dungeon/hattegon.png
-images/tangomon/dungeon/jimangon.png
-images/tangomon/dungeon/mizebi.png
-images/tangomon/dungeon/ryujinn.png
-images/tangomon/forest/cobragon.png
-images/tangomon/forest/damashtagon.png
-images/tangomon/forest/kabagon.png
+images/tangomon/dark_forest/cobragon.png
+images/tangomon/doom_dungeon/hadakyu.png
+images/tangomon/doom_dungeon/jimangon.png
+images/tangomon/doom_dungeon/ryujinn.png
+images/tangomon/mountains_of_malevolence/hattegon.png
+images/tangomon/mountains_of_malevolence/damashtagon.png
+images/tangomon/oasial_crypt/mizebi.png
+images/tangomon/oceanic_abyss/kabagon.png
 
 Authors:
   Stephen "Redshrike" Challener <https://opengameart.org/users/redshrike>
@@ -132,15 +132,22 @@ Source: https://opengameart.org/content/dark-music-vrc6-and-2a03
 ------------------------------------------------------------------------
 
 images/misc/logo.png
-screens/title.tmx
-tilesets/basictiles.tsx
-tilesets/objects.tsx
-worldmaps/0.tmx
-worldmaps/1.tmx
-worldmaps/2.tmx
-worldmaps/3.tmx
-worldmaps/4.tmx
-worldmaps/base.tmx
+images/zones/dark_forest.png
+images/zones/dark_forest.tmx
+images/zones/death_valley.png
+images/zones/death_valley.tmx
+images/zones/doom_dungeon.png
+images/zones/doom_dungeon.tmx
+images/zones/grassland.png
+images/zones/grassland.tmx
+images/zones/haunted_castle.png
+images/zones/haunted_castle.tmx
+images/zones/mountains_of_malevolence.png
+images/zones/mountains_of_malevolence.tmx
+images/zones/oasial_crypt.png
+images/zones/oasial_crypt.tmx
+images/zones/oceanic_abyss.png
+images/zones/oceanic_abyss.tmx
 sounds/cancel.wav
 sounds/confirm.wav
 sounds/critical.wav
