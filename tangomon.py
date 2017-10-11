@@ -68,12 +68,17 @@ parser.add_argument(
 parser.add_argument(
     "-d", "--datadir",
     help=_('Where to load the game data from (Default: "{}")').format(DATA))
+parser.add_argument(
+    "-c", "--configdir",
+    help=_('Where to store save data in (Default: "{}")').format(CONFIG))
 args = parser.parse_args()
 
 NOSAVE = args.nosave
 DELTA = not args.nodelta
 if args.datadir:
     DATA = args.datadir
+if args.configdir:
+    CONFIG = args.configdir
 
 if six.PY2:
     gettext.install(

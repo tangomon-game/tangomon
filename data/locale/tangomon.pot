@@ -52,6 +52,10 @@ msgstr ""
 msgid "Where to load the game data from (Default: \"{}\")"
 msgstr ""
 
+# Explanation for the "-c" command-line option
+msgid "Where to store save data in (Default: \"{}\")"
+msgstr ""
+
 
 # Zone names
 msgid "Grassland"
