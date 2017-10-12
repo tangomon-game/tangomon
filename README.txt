@@ -35,7 +35,8 @@ a terminal with the "-h" command-line option for more information.
 HOW TO PLAY
 
 Use the arrow keys to move and the Enter key to select, or to open the
-pause menu (where you can access all important in-game actions).
+pause menu (where you can access all important in-game actions).  In the
+zone selection screen, press Space to start a battle.
 
 This is a simple, fun learning game where you control your learning. It
 was designed with vocabulary in mind, but it can be played with any

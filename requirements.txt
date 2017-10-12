@@ -3,6 +3,3 @@ sge-pygame>=1.4
 six>=1.4
 uniseg
 xsge_gui>=1.1
-xsge_physics>=0.13
-tmx>=1.9
-xsge_tmx>=1.1
