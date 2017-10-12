@@ -25,7 +25,6 @@ __version__ = "2.0a0"
 import argparse
 import datetime
 import gettext
-import itertools
 import json
 import math
 import os
@@ -1282,7 +1281,10 @@ def get_tangomon_name(tangomon):
 
 
 def get_all_tangomon():
-    return set(itertools.chain.from_iterable(tangomon_sets.items()))
+    all_tangomon = set()
+    for i in tangomon_sets:
+        all_tangomon |= tangomon_sets[i]
+    return all_tangomon
 
 
 def get_player_unique_tangomon():
