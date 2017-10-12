@@ -400,7 +400,7 @@ class Arena(Room):
 
         self.notification_text = ""
 
-        self.pt_name = player_tangomon.pop(self.player)
+        self.pt_name = player_tangomon[self.player]
         self.player_name = get_tangomon_name(self.pt_name)
         self.player_hp = get_tangomon_hp_max(self.pt_name)
         self.player_base_power = get_tangomon_base_power(self.pt_name)
@@ -1369,11 +1369,6 @@ def get_tangomon_base_power(tangomon):
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
     return 1
-
-
-def give_player_tangomon(tangomon):
-    global player_tangomon
-    player_tangomon.append(tangomon)
 
 
 def add_player_tangoji():
