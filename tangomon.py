@@ -20,7 +20,7 @@ from __future__ import absolute_import
 from __future__ import print_function
 from __future__ import unicode_literals
 
-__version__ = "1.2"
+__version__ = "1.2.1"
 
 import argparse
 import datetime
@@ -349,7 +349,7 @@ class Arena(Room):
 
         self.notification_text = ""
 
-        self.pt_name = player_tangomon.pop(self.player)
+        self.pt_name = player_tangomon[self.player]
         self.player_name = get_tangomon_name(self.pt_name)
         self.player_hp = get_tangomon_hp_max(self.pt_name)
         self.player_base_power = get_tangomon_base_power(self.pt_name)
