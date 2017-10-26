@@ -614,7 +614,9 @@ class Arena(Room):
             text = _("WARNING: If you leave this battle, you will lose your current tangomon! Are you sure?")
             buttons = [_("No"), _("Yes")]
             if xsge_gui.show_message(gui_handler, message=text, buttons=buttons):
-                self.end_battle()
+                self.reset_state()
+                self.alarms = {}
+                self.event_alarm("player_lose")
 
     def event_alarm(self, alarm_id):
         if alarm_id == "time_limit":
