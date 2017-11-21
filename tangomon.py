@@ -125,20 +125,13 @@ ZONE_NAMES = {
     "mountains_of_malevolence": _("Mountains of Malevolence"),
     "death_valley": _("Death Valley"),
     "doom_dungeon": _("Doom Dungeon")}
-ZONE_MUSIC = {
-    "grassland": "battle.ogg",
-    "oceanic_abyss": "battle.ogg",
-    "dark_forest": "battle.ogg",
-    "haunted_castle": "battle_dungeon.ogg",
-    "oasial_crypt": "battle_dungeon.ogg",
-    "mountains_of_malevolence": "battle.ogg",
-    "death_valley": "battle.ogg",
-    "doom_dungeon": "battle_dungeon.ogg"}
 
 HEALTH_MAX_START = 500
-BASE_POWER_START = 100
+BASE_POWER_START = 75
 HEALTH_INCREMENT_FACTOR = 1.025
-BASE_POWER_INCREMENT_FACTOR = 1.02
+BASE_POWER_INCREMENT_FACTOR = 1.025
+ZONE_BUFFER = 3
+NEW_TANGOMON_REDUNDANCY = 3
 
 BATTLE_START_WAIT = 2 * FPS
 TEST_WAIT = FPS / 2
@@ -154,14 +147,7 @@ TANGOJI_MULT_BULK_BONUS = 0.005
 TANGOJI_MULT_TIME_BONUS = 0.5 / TANGOJI_ENTRY_TIME
 CRITICAL_CHANCE = 0.02
 CRITICAL_MULT = 2
-
-PLAYER_SPEED = 1
-PLAYER_ENCOUNTER_CHANCE = 0.01
-
-PLAYER_BBOX_X = 3
-PLAYER_BBOX_Y = 7
-PLAYER_BBOX_WIDTH = 10
-PLAYER_BBOX_HEIGHT = 10
+ENEMY_NERF = 0.5
 
 MINUTE = 60
 HOUR = 60 * MINUTE
@@ -356,8 +342,26 @@ class Worldmap(Room):
             player_zone %= len(ZONES)
         elif key in {sge.s.space, sge.s.up, sge.s.down, sge.s.end}:
             zone = ZONES[player_zone]
-            tangomon = random.choice(list(tangomon_sets[zone]))
-            arena = Arena(tangomon, music=ZONE_MUSIC[zone])
+            tset = tangomon_sets[zone]
+
+            choices = list(tset)
+            for tangomon in tset:
+                if tangomon not in player_tangomon:
+                    # Not caught, so we give it a couple redundant
+                    # entries to make encountering it more likely.
+                    for i in six.moves.range(NEW_TANGOMON_REDUNDANCY):
+                        choices.append(tangomon)
+            tangomon = random.choice(choices)
+
+            ect = tangomon_encountered[zone]
+            music = "battle.ogg"
+            if tangomon in ect:
+                if ect.index(tangomon) >= len(tset) - 1:
+                    music = "battle_dungeon.ogg"
+            elif len(ect) == len(tset) - 1:
+                music = "battle_dungeon.ogg"
+
+            arena = Arena(tangomon, music=music)
             arena.start()
         elif key in {sge.s.escape, sge.s.enter, sge.s.tab, sge.s.backspace}:
             WorldmapMenu.create()
@@ -381,8 +385,6 @@ class Arena(Room):
 
         super(Arena, self).event_room_start()
         self.add(gui_handler)
-
-        self.player_tangomon = player_tangomon[:]
 
         padding = 8
         w = sge.game.width
@@ -554,56 +556,23 @@ class Arena(Room):
             interval = ATTACK_INTERVAL_TIME
             play_sound(hurt_sound)
         else:
-            interval = ATTACK_INTERVAL_FAIL_TIME
-            self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered.").format(
-                tangoji=word)
-
-        if self.enemy_hp > 0:
-            self.alarms["init_enemy_attack"] = interval
-        else:
-            player_tangomon = self.player_tangomon
-            self.alarms["player_win"] = interval
-
-    def enemy_attack(self):
-        self.reset_state()
-
-        word = self.tangoji.get("word", "")
-        if self.tangoji_bonus:
-            defense = max(1, int(self.player_base_power * self.tangoji_bonus))
-
-            # Critical Block
-            if random.random() < CRITICAL_CHANCE:
-                defense *= CRITICAL_MULT
-                play_sound(critical_sound)
-
-            damage = int(max(0, self.enemy_base_power - defense))
-            interval = ATTACK_INTERVAL_TIME
-
-            if damage > 0:
-                self.player_hp -= damage
-                self.player_object.image_alpha = 128
-                play_sound(hurt_sound)
-                play_sound(block_sound)
-                self.notification_text = _('Defense with "{tangoji}" succeeded! Damage from {enemy} attack is only {damage} (reduced by {defense}).').format(
-                    enemy=self.enemy_name, tangoji=word, damage=damage,
-                    defense=defense)
-            else:
-                play_sound(block_sound)
-                self.notification_text = _('Defense with "{tangoji}" succeeded! {enemy} attack blocked.').format(
-                        enemy=self.enemy_name, tangoji=word)
-        else:
-            damage = int(self.enemy_base_power)
+            damage = self.enemy_base_power * ENEMY_NERF
+            damage += random.uniform(-damage / 10, damage / 10)
+            damage = int(damage)
             self.player_hp -= damage
             self.player_object.image_alpha = 128
             interval = ATTACK_INTERVAL_FAIL_TIME
+            play_sound(block_sound)
             play_sound(hurt_sound)
-            self.notification_text = _("Defense failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} attacks, inflicting {damage} damage.").format(
+            self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
                 tangoji=word, enemy=self.enemy_name, damage=damage)
 
-        if self.player_hp > 0:
-            self.alarms["init_player_attack"] = interval
-        else:
+        if self.enemy_hp <= 0:
+            self.alarms["player_win"] = interval
+        elif self.player_hp <= 0:
             self.alarms["player_lose"] = interval
+        else:
+            self.alarms["init_player_attack"] = interval
 
     def use_tangokan(self):
         global player_tangomon
@@ -680,12 +649,6 @@ class Arena(Room):
             self.choose_tangoji()
             self.show_clue()
             self.callback = self.player_attack
-            self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
-        elif alarm_id == "init_enemy_attack":
-            self.reset_state()
-            self.choose_tangoji()
-            self.show_clue()
-            self.callback = self.enemy_attack
             self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
         elif alarm_id == "player_lose":
             self.player_run()
@@ -1352,7 +1315,7 @@ def get_tangomon_hp_max(tangomon):
 
             j = tangomon_encountered[i].index(tangomon)
             for k in ZONES[:ZONES.index(i)]:
-                j += len(tangomon_sets[i])
+                j += len(tangomon_sets[i]) + ZONE_BUFFER
             return int(HEALTH_MAX_START * (HEALTH_INCREMENT_FACTOR ** j))
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
@@ -1368,7 +1331,7 @@ def get_tangomon_base_power(tangomon):
 
             j = tangomon_encountered[i].index(tangomon)
             for k in ZONES[:ZONES.index(i)]:
-                j += len(tangomon_sets[i])
+                j += len(tangomon_sets[i]) + ZONE_BUFFER
             return BASE_POWER_START * (BASE_POWER_INCREMENT_FACTOR ** j)
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))

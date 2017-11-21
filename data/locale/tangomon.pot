@@ -112,36 +112,11 @@ msgstr ""
 
 # Shown when the player's tangomon fails to attack due to an incorrect
 # tangoji entry. {tangoji} is replaced with the tangoji the player was
-# supposed to enter.
-msgid "Attack failed! Correct Tangoji (\"{tangoji}\") not entered."
-msgstr ""
-
-# Shown when the player's tangomon successfully defends, but the defense
-# is not strong enough to block the attack completely (usually caused by
-# fighting a stronger tangomon or using an old tangoji). {tangoji} is
-# replaced with the tangoji used to defend, {enemy} is replaced with the
-# name of the enemy tangomon, {damage} is replaced with the damage
-# inflicted, and {defense} is replaced with the reduction in damaged
-# caused by the successful defense.
-msgid ""
-"Defense with \"{tangoji}\" succeeded! Damage from {enemy} attack is only "
-"{damage} (reduced by {defense})."
-msgstr ""
-
-# Shown when the player's tangomon successfully defends and the defense
-# completely blocks the enemy attack. {tangoji} is replaced with the
-# tangoji used to defend and {enemy} is replaced with the name of the
-# enemy tangomon.
-msgid "Defense with \"{tangoji}\" succeeded! {enemy} attack blocked."
-msgstr ""
-
-# Shown when the player's tangomon fails to defend due to an incorrect
-# tangoji entry. {tangoji} is replaced with the tangoji the player was
 # supposed to enter, {enemy} is replaced with the name of the enemy
-# tangomon, and {damage} is replced with the damage inflicted.
-msgid ""
-"Defense failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} "
-"attacks, inflicting {damage} damage."
+# tangomon, and {damage} is replced with the damage inflicted by the
+# enemy's counterattack.
+msgid "Attack failed! Correct Tangoji (\"{tangoji}\") not entered. "
+"{enemy} counterattacks, inflicting {damage} damage."
 msgstr ""
 
 # Shown when a tangokan is used successfully. {tangomon} is replaced
