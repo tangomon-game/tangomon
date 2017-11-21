@@ -1121,11 +1121,7 @@ class CreateTangokanMenu(TangojiMenu):
 
 class TangomonInfo(xsge_gui.Dialog):
 
-    def __init__(self, tangomon=0):
-        super(TangomonInfo, self).__init__(
-            gui_handler, 0, 0, sge.game.width, sge.game.height, border=False,
-            background_color=menu_color)
-
+    def set_tangomon(self, tangomon=0):
         self.tangomon = tangomon % len(player_tangomon)
         iname = player_tangomon[self.tangomon]
         name = get_tangomon_name(iname)
@@ -1136,15 +1132,14 @@ class TangomonInfo(xsge_gui.Dialog):
         padding = 8
 
         y = padding
-        name_text = _("#{position}: {tangomon}".format(
+        self.name_label.text = _("#{position}: {tangomon}".format(
             position=(self.tangomon + 1), tangomon=name))
-        name_label = xsge_gui.Label(
-            self, self.width / 2, y, 10, name_text, font=font_big,
-            width=(self.width - 2 * padding), halign=sge.s.center)
+        self.name_label.y = y
 
         y += font.get_height(name) + padding
-        sprite_widget = xsge_gui.DecorativeWidget(
-            self, self.width / 2 - sprite.width / 2, y, 10, sprite=sprite)
+        self.sprite_widget.sprite = sprite
+        self.sprite_widget.x = self.width / 2 - sprite.width / 2
+        self.sprite_widget.y = y
 
         y += sprite.height + padding
         zone = "N/A"
@@ -1152,23 +1147,35 @@ class TangomonInfo(xsge_gui.Dialog):
             if iname in tangomon_sets[i]:
                 zone = ZONE_NAMES[i]
                 break
-        info_text = _("Zone: {zone}\nHP: {hp}\nPower: {power}").format(
+        self.info_label.text = _("Zone: {zone}\nHP: {hp}\nPower: {power}").format(
             zone=zone, hp=hp, power=int(base_power))
-        info_label = xsge_gui.Label(
-            self, self.width / 2, y, 10, info_text, font=font_big,
+        self.info_label.y = y
+
+    def __init__(self, tangomon=0):
+        super(TangomonInfo, self).__init__(
+            gui_handler, 0, 0, sge.game.width, sge.game.height, border=False,
+            background_color=menu_color)
+
+        padding = 8
+
+        self.name_label = xsge_gui.Label(
+            self, self.width / 2, 0, 10, "NULL", font=font_big,
+            width=(self.width - 2 * padding), halign=sge.s.center)
+        self.sprite_widget = xsge_gui.DecorativeWidget(
+            self, self.width / 2 - sprite.width / 2, 0, 10)
+        self.info_label = xsge_gui.Label(
+            self, self.width / 2, 0, 10, "(NULL)", font=font_big,
             width=(self.width - 2 * padding), halign=sge.s.center)
 
+        self.set_tangomon(tangomon)
+
     def event_press_left(self):
-        self.destroy()
-        sge.game.refresh()
         play_sound(select_sound)
-        TangomonInfo(self.tangomon - 1).show()
+        self.set_tangomon(self.tangomon - 1)
 
     def event_press_right(self):
-        self.destroy()
-        sge.game.refresh()
         play_sound(select_sound)
-        TangomonInfo(self.tangomon + 1).show()
+        self.set_tangomon(self.tangomon + 1)
 
     def event_press_enter(self):
         self.destroy()
