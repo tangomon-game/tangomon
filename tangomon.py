@@ -340,7 +340,7 @@ class Worldmap(Room):
             play_sound(select_sound)
             player_zone += 1
             player_zone %= len(ZONES)
-        elif key in {sge.s.space, sge.s.up, sge.s.down, sge.s.end}:
+        elif key in {sge.s.enter, sge.s.kp_enter}:
             zone = ZONES[player_zone]
             tset = tangomon_sets[zone]
 
@@ -363,7 +363,7 @@ class Worldmap(Room):
 
             arena = Arena(tangomon, music=music)
             arena.start()
-        elif key in {sge.s.escape, sge.s.enter, sge.s.tab, sge.s.backspace}:
+        elif key in {sge.s.escape, sge.s.space, sge.s.tab, sge.s.backspace}:
             WorldmapMenu.create()
 
 
@@ -729,7 +729,7 @@ class CreditsScreen(sge.dsp.Room):
             if "end" not in self.alarms:
                 for obj in self.sections:
                     obj.yvelocity += 0.25
-        elif key in {sge.s.enter, sge.s.escape}:
+        elif key in {sge.s.enter, sge.s.kp_enter, sge.s.escape}:
             sge.game.start_room.start()
 
 

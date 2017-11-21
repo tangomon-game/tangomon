@@ -78,11 +78,11 @@ tangomon will run away from you. This will also happen if you quit the
 game in the middle of a battle.
 
 When you have learned a tangoji, you can convert it to a "tangokan" via
-the menu in the map screen accessed by the Enter key. Tangokans are used
-to convince other tangomon to join your team. At the end of a battle,
-one of your active tangokans may activate. When this happens, you have
-to correctly give the tangoji used to create it. If you fail, the
-tangokan will revert back into a tangoji.
+the menu in the map screen accessed by the Escape key. Tangokans are
+used to convince other tangomon to join your team. At the end of a
+battle, one of your active tangokans may activate. When this happens,
+you have to correctly give the tangoji used to create it. If you fail,
+the tangokan will revert back into a tangoji.
 
 After using a tangokan, your tangomon will periodically test your memory
 of, so make sure you really know every tangoji you convert into a
