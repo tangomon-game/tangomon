@@ -1113,9 +1113,10 @@ class CreateTangokanMenu(TangojiMenu):
             make_tangokan(tangoji)
             msg = _("New tangokan created! It will activate in 2 hours. At that point, you will be able to use your tangokan to convince a new tangomon to join your team!")
             DialogBox(gui_handler, msg).show()
+            WorldmapMenu.create(default=6)
         else:
             play_sound(cancel_sound)
-            WorldmapMenu.create(default=5)
+            WorldmapMenu.create(default=6)
 
 
 class TangomonInfo(xsge_gui.Dialog):
