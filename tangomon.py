@@ -1334,7 +1334,7 @@ def get_tangomon_hp_buffed(tangomon):
     total_hp = 0
     for s in player_tangomon:
         ihp = get_tangomon_hp_max(s)
-        if ihp > hp:
+        if ihp >= hp:
             total_hp += ihp
             n += 1
     if n:
@@ -1351,7 +1351,7 @@ def get_tangomon_power_buffed(tangomon):
     total_power = 0
     for s in player_tangomon:
         ipower = get_tangomon_base_power(s)
-        if ipower > power:
+        if ipower >= power:
             total_power += ipower
             n += 1
     if n:
