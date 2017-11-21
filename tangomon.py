@@ -512,8 +512,9 @@ class Arena(Room):
         word = self.tangoji.get("word", "")
         if self.tangoji_bonus:
             self.test_num += 1
-            self.tangoji["time"] = (time.time() +
-                                    self.tangoji.setdefault("next_time", DAY))
+            nt = self.tangoji.setdefault("next_time", DAY)
+            dev = random.uniform(-nt / 10, nt / 10)
+            self.tangoji["time"] = time.time() + nt + dev
             self.tangoji["next_time"] *= 2
             player_tangojections.append(self.tangoji)
             player_tangojections.sort(key=lambda d: d.get("time"))
