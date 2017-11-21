@@ -350,8 +350,10 @@ msgid "#{position}: {tangomon}"
 msgstr ""
 
 # Tangomon info. {hp} is replaced by the tangomon's max HP, {power} is
-# replaced by the tangomon's base power.
+# replaced by the tangomon's base power, and {zone} is replaced by the
+# name of the zone the tangomon comes from.
 msgid ""
+"Zone: {zone}\n"
 "HP: {hp}\n"
 "Power: {power}"
 msgstr ""

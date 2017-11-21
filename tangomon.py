@@ -97,7 +97,6 @@ if args.lang:
         lang.install()
 
 SCREEN_SIZE = [640, 480]
-TILE_SIZE = 16
 FPS = 60
 DELTA_MIN = FPS / 20
 DELTA_MAX = FPS * 4
@@ -403,8 +402,8 @@ class Arena(Room):
 
         self.pt_name = player_tangomon[self.player]
         self.player_name = get_tangomon_name(self.pt_name)
-        self.player_hp = get_tangomon_hp_max(self.pt_name)
-        self.player_base_power = get_tangomon_base_power(self.pt_name)
+        self.player_hp = get_tangomon_hp_buffed(self.pt_name)
+        self.player_base_power = get_tangomon_power_buffed(self.pt_name)
         player_sprite = get_tangomon_sprite(self.pt_name)
         y = self.real_height / 2 - player_sprite.height / 2
         self.player_object = sge.dsp.Object.create(
@@ -418,22 +417,6 @@ class Arena(Room):
         y = self.real_height / 2 - enemy_sprite.height / 2
         self.enemy_object = sge.dsp.Object.create(x, y, sprite=enemy_sprite,
                                                   tangible=False)
-
-        # Peer buff (weaker tangomon get strength from stronger tangomon)
-        n = 0
-        total_hp = 0
-        total_power = 0
-        for s in player_tangomon:
-            hp = get_tangomon_hp_max(s)
-            if hp > self.player_hp:
-                total_hp += hp
-                total_power += get_tangomon_base_power(s)
-                n += 1
-        if n:
-            avg_hp = int(total_hp / n)
-            avg_power = int(total_power / n)
-            self.player_hp = max(self.player_hp, avg_hp)
-            self.player_base_power = max(self.player_base_power, avg_power)
 
         self.init_tangoject(BATTLE_START_WAIT)
 
@@ -1146,8 +1129,8 @@ class TangomonInfo(xsge_gui.Dialog):
         iname = player_tangomon[self.tangomon]
         name = get_tangomon_name(iname)
         sprite = get_tangomon_sprite(iname)
-        hp = get_tangomon_hp_max(iname)
-        base_power = get_tangomon_base_power(iname)
+        hp = get_tangomon_hp_buffed(iname)
+        base_power = get_tangomon_power_buffed(iname)
 
         padding = 8
 
@@ -1163,8 +1146,13 @@ class TangomonInfo(xsge_gui.Dialog):
             self, self.width / 2 - sprite.width / 2, y, 10, sprite=sprite)
 
         y += sprite.height + padding
-        info_text = _("HP: {hp}\nPower: {power}").format(
-            hp=hp, power=int(base_power))
+        zone = "N/A"
+        for i in tangomon_sets:
+            if iname in tangomon_sets[i]:
+                zone = ZONE_NAMES[i]
+                break
+        info_text = _("Zone: {zone}\nHP: {hp}\nPower: {power}").format(
+            zone=zone, hp=hp, power=int(base_power))
         info_label = xsge_gui.Label(
             self, self.width / 2, y, 10, info_text, font=font_big,
             width=(self.width - 2 * padding), halign=sge.s.center)
@@ -1337,6 +1325,40 @@ def get_tangomon_base_power(tangomon):
 
     warnings.warn('"{}" is not a valid Tangomon.'.format(tangomon))
     return 1
+
+
+def get_tangomon_hp_buffed(tangomon):
+    # HP of a player's tangomon, buffed by its peers.
+    hp = get_tangomon_hp_max(tangomon)
+    n = 0
+    total_hp = 0
+    for s in player_tangomon:
+        ihp = get_tangomon_hp_max(s)
+        if ihp > hp:
+            total_hp += ihp
+            n += 1
+    if n:
+        avg_hp = int(total_hp / n)
+        hp = max(hp, avg_hp)
+
+    return hp
+
+
+def get_tangomon_power_buffed(tangomon):
+    # HP of a player's tangomon, buffed by its peers.
+    power = get_tangomon_base_power(tangomon)
+    n = 0
+    total_power = 0
+    for s in player_tangomon:
+        ipower = get_tangomon_base_power(s)
+        if ipower > power:
+            total_power += ipower
+            n += 1
+    if n:
+        avg_power = int(total_power / n)
+        power = max(power, avg_power)
+
+    return power
 
 
 def add_player_tangoji():
