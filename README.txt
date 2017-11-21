@@ -85,7 +85,7 @@ you have to correctly give the tangoji used to create it. If you fail,
 the tangokan will revert back into a tangoji.
 
 After using a tangokan, your tangomon will periodically test your memory
-of, so make sure you really know every tangoji you convert into a
+of it, so make sure you really know every tangoji you convert into a
 tangokan! Any failure to pass your tangomon's test will result in that
 tangomon abandoning you and the old tangoji being added back into your
 current tangoji list. The interval at which you are tested degrades
@@ -98,7 +98,7 @@ The game does not have an ending. Your goal is to collect all types of
 tangomon. If you have successfully collected all tangomon, or if you
 just want to start over, you can reset your position and tangomon while
 keeping your current tangojis and tangokans via the "Reset Game" option
-in the pause menu.
+in the menu.
 
 If, after entering fullscreen mode, the keyboard becomes unresponsive,
 you can exit the game by pressing the middle mouse button. This is a
