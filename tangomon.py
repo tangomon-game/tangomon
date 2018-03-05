@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-# Copyright (C) 2017 Julie Marchant <onpon4@riseup.net>
+# Copyright (C) 2017-2018 Julie Marchant <onpon4@riseup.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -642,8 +642,7 @@ class Arena(Room):
             self.reset_state()
 
             tangokans = get_player_active_tangokans()
-            if tangokans and (self.enemy not in player_tangomon or
-                              random.random() < 0.1):
+            if tangokans and self.enemy not in player_tangomon:
                 i = random.choice(tangokans)
                 self.tangoji = player_tangokans.pop(i)
                 self.show_clue()
