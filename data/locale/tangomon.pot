@@ -1,5 +1,5 @@
 # Tangomon Translateable Text
-# Copyright (C) 2017 Julie Marchant <onpon4@riseup.net>
+# Copyright (C) 2017-2018 Julie Marchant <onpon4@riseup.net>
 #
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
-"POT-Creation-Date: 2017-06-18 08:30-0400\n"
+"POT-Creation-Date: 2018-04-11 11:22-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -59,6 +59,9 @@ msgstr ""
 
 # Zone names
 msgid "Grassland"
+msgstr ""
+
+msgid "Camp Green"
 msgstr ""
 
 msgid "Oceanic Abyss"

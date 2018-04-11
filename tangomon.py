@@ -112,11 +112,12 @@ TANGOJI_LIST_SIZE = 10
 TANGOJI_MIN = 3
 
 ZONES = [
-    "grassland", "oceanic_abyss", "dark_forest", "haunted_castle",
+    "grassland", "camp_green", "oceanic_abyss", "dark_forest", "haunted_castle",
     "oasial_crypt", "mountains_of_malevolence", "death_valley",
     "doom_dungeon"]
 ZONE_NAMES = {
     "grassland": _("Grassland"),
+    "camp_green": _("Camp Green"),
     "oceanic_abyss": _("Oceanic Abyss"),
     "dark_forest": _("Dark Forest"),
     "haunted_castle": _("Haunted Castle"),

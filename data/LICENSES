@@ -32,6 +32,13 @@ Source: https://opengameart.org/content/6-more-rpg-enemies
 
 ------------------------------------------------------------------------
 
+images/tangomon/camp_green/gozorius.png
+images/tangomon/camp_green/kenlin.png
+images/tangomon/camp_green/madoshlin.png
+images/tangomon/camp_green/rokukeiri.png
+images/tangomon/camp_green/rokushi.png
+images/tangomon/camp_green/senroku.png
+images/tangomon/dark_forest/leocekin.png
 images/tangomon/dark_forest/wolinite.png
 images/tangomon/death_valley/honewani.png
 images/tangomon/death_valley/mastonin.png
@@ -68,6 +75,7 @@ Sources:
   https://opengameart.org/content/evil-pumpkin-halloween-ff6-ish-styled-enemy-or-other
   https://opengameart.org/content/ice-golem-rpg-enemy-sprite
   https://opengameart.org/content/3-form-rpg-boss-harlequin-epicycle
+  https://opengameart.org/content/leocephas-ff6-ish-style-rpg-miniboss
 
 ------------------------------------------------------------------------
 
@@ -103,6 +111,14 @@ Source: https://opengameart.org/content/rpg-enemies-11-dragons
 
 ------------------------------------------------------------------------
 
+images/tangomon/oasial_crypt/jarasicus.png
+
+Author: hc <https://opengameart.org/users/hc>
+License: CC BYY 3.0 <http://creativecommons.org/licenses/by/3.0/>
+Source: https://opengameart.org/content/reptile-rpg-enemyboss-sprite
+
+------------------------------------------------------------------------
+
 images/objects/characters.png
 images/objects/map_character.png
 images/tiles/basictiles.png
@@ -124,6 +140,8 @@ Source: https://opengameart.org/content/hungry-dino-9-chiptune-tracks-10-sfx
 ------------------------------------------------------------------------
 
 images/misc/logo.png
+images/zones/camp_green.png
+images/zones/camp_green.tmx
 images/zones/dark_forest.png
 images/zones/dark_forest.tmx
 images/zones/death_valley.png
