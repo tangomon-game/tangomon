@@ -1518,10 +1518,9 @@ def load_game():
         player_tangokans = slot.get("player_tangokans", [])
         player_tangomon = slot.get("player_tangomon", [])
         player_tangojections = slot.get("player_tangojections", [])
-        tangomon_encountered = {}
+        tangomon_encountered = slot.get("tangomon_encountered", {})
         for i in ZONES:
-            tangomon_encountered[i] = []
-        tangomon_encountered = slot.get("tangomon_encountered", tangomon_encountered)
+            tangomon_encountered.setdefault(i, [])
 
         if slot.get("version", 0) < 1:
             tjs = list(set([(d["word"], d["clue"]) for d in player_tangojections]))
