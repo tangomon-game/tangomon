@@ -158,10 +158,15 @@ images/zones/oasial_crypt.png
 images/zones/oasial_crypt.tmx
 images/zones/oceanic_abyss.png
 images/zones/oceanic_abyss.tmx
+sounds/block.wav
 sounds/cancel.wav
+sounds/charge.wav
 sounds/confirm.wav
 sounds/critical.wav
-sounds/block.wav
+sounds/engage_tangokan.wav
+sounds/fail_test.wav
+sounds/pass_test.wav
+sounds/start_tangoject.wav
 sounds/type.wav
 
 Author: Julie Marchant <https://onpon4.github.io>

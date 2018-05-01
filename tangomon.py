@@ -441,6 +441,7 @@ class Arena(Room):
                 player_tangojections[0].get("time", time.time()) <= time.time()):
             self.tangoji = player_tangojections.pop(0)
             self.alarms["init_tangoject"] = wait_time
+            play_sound(start_tangoject_sound)
         else:
             self.alarms["init_player_attack"] = wait_time
 
@@ -510,12 +511,14 @@ class Arena(Room):
                 self.notification_text = _("You passed the test given to you by {tangomon}!").format(
                     tangomon=self.player_name)
                 self.alarms["init_player_attack"] = ATTACK_INTERVAL_TIME
+                play_sound(pass_test_sound)
         else:
             self.notification_text = _("You failed the test given to you by {tangomon}! {tangomon} loses faith in you and \"{tangoji}\" is transformed back into a tangoji!").format(
                 tangomon=self.player_name, tangoji=word)
             self.tangoji["power"] = TANGOJI_MULT_START
             player_tangojis.append(self.tangoji)
             self.alarms["player_lose"] = ATTACK_INTERVAL_FAIL_TIME
+            play_sound(fail_test_sound)
 
     def player_attack(self):
         global player_tangomon
@@ -576,6 +579,7 @@ class Arena(Room):
             player_tangojections.append(tangoji)
             self.notification_text = _("Impression succeeded! {tangomon} has joined your team!").format(
                 tangomon=self.enemy_name)
+            play_sound(pass_test_sound)
         else:
             interval = ATTACK_INTERVAL_FAIL_TIME
             self.tangoji["power"] = TANGOJI_MULT_PERSISTENT_MIN
@@ -583,6 +587,7 @@ class Arena(Room):
             self.enemy_run()
             self.notification_text = _("Impression failed! {tangomon} runs away, unimpressed, and your tangokan turns back into a tangoji!").format(
                 tangomon=self.enemy_name)
+            play_sound(fail_test_sound)
 
         self.alarms["leave_arena"] = interval
 
@@ -635,6 +640,7 @@ class Arena(Room):
             self.show_clue()
             self.callback = self.player_attack
             self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+            play_sound(charge_sound)
         elif alarm_id == "player_lose":
             self.player_run()
             del player_tangomon[self.player]
@@ -649,6 +655,7 @@ class Arena(Room):
                 self.show_clue()
                 self.callback = self.use_tangokan
                 self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+                play_sound(engage_tangokan_sound)
             else:
                 self.enemy_run()
                 self.alarms["leave_arena"] = ATTACK_INTERVAL_TIME
@@ -1621,9 +1628,16 @@ for zone in ZONES:
 create_fonts()
 
 # Load sounds
+charge_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "charge.wav"))
 hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
 block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
 critical_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "critical.wav"))
+engage_tangokan_sound = sge.snd.Sound(os.path.join(
+    DATA, "sounds", "engage_tangokan.wav"))
+start_tangoject_sound = sge.snd.Sound(os.path.join(
+    DATA, "sounds", "start_tangoject.wav"))
+pass_test_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "pass_test.wav"))
+fail_test_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "fail_test.wav"))
 
 select_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "select.ogg"))
 confirm_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "confirm.wav"))
