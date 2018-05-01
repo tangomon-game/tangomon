@@ -378,6 +378,7 @@ class Arena(Room):
         self.tangoji_bonus = 0
         self.callback = None
         self.test_num = 0
+        self.tangoject_started = False
         super(Arena, self).__init__(**kwargs)
 
     def event_room_start(self):
@@ -441,7 +442,6 @@ class Arena(Room):
                 player_tangojections[0].get("time", time.time()) <= time.time()):
             self.tangoji = player_tangojections.pop(0)
             self.alarms["init_tangoject"] = wait_time
-            play_sound(start_tangoject_sound)
         else:
             self.alarms["init_player_attack"] = wait_time
 
@@ -634,6 +634,10 @@ class Arena(Room):
             self.show_clue()
             self.callback = self.tangoject
             self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+
+            if not self.tangoject_started:
+                play_sound(start_tangoject_sound)
+                self.tangoject_started = True
         elif alarm_id == "init_player_attack":
             self.reset_state()
             self.choose_tangoji()
@@ -1633,7 +1637,7 @@ hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
 block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
 critical_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "critical.wav"))
 engage_tangokan_sound = sge.snd.Sound(os.path.join(
-    DATA, "sounds", "engage_tangokan.wav"))
+    DATA, "sounds", "engage_tangokan.wav"), volume=0.8)
 start_tangoject_sound = sge.snd.Sound(os.path.join(
     DATA, "sounds", "start_tangoject.wav"))
 pass_test_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "pass_test.wav"))
