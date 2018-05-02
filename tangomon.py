@@ -97,6 +97,8 @@ if args.lang:
         lang.install()
 
 SCREEN_SIZE = [640, 480]
+BG_WIDTH = 640
+BG_HEIGHT = 320
 FPS = 60
 DELTA_MIN = FPS / 20
 DELTA_MAX = FPS * 4
@@ -361,7 +363,7 @@ class Worldmap(Room):
             elif len(ect) == len(tset) - 1:
                 music = "battle_dungeon.ogg"
 
-            arena = Arena(tangomon, music=music)
+            arena = Arena(tangomon, zone, music=music)
             arena.start()
         elif key in {sge.s.escape, sge.s.space, sge.s.tab, sge.s.backspace}:
             WorldmapMenu.create()
@@ -371,7 +373,7 @@ class Arena(Room):
 
     """Arena where monsters fight."""
 
-    def __init__(self, enemy, **kwargs):
+    def __init__(self, enemy, zone, **kwargs):
         self.player = random.randrange(len(player_tangomon))
         self.enemy = enemy
         self.tangoji = None
@@ -379,7 +381,22 @@ class Arena(Room):
         self.callback = None
         self.test_num = 0
         self.tangoject_started = False
-        super(Arena, self).__init__(**kwargs)
+
+        layers = []
+        d = os.path.join(DATA, "images", "arenas")
+        try:
+            s = sge.gfx.Sprite(
+                zone, d, width=BG_WIDTH, height=BG_HEIGHT)
+        except (IOError, OSError):
+            pass
+        else:
+            x = (SCREEN_SIZE[0] - BG_WIDTH) / 2
+            y = (SCREEN_SIZE[1] - BG_HEIGHT) / 2
+            layers.append(sge.gfx.BackgroundLayer(s, x, y))
+
+        background = sge.gfx.Background(layers, sge.gfx.Color(sge.s.black))
+
+        super(Arena, self).__init__(background=background, **kwargs)
 
     def event_room_start(self):
         global player_tangomon
