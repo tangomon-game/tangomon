@@ -211,7 +211,7 @@ class Game(sge.dsp.Game):
 
     def event_close(self):
         if isinstance(self.current_room, Arena):
-            self.current_room.event_key_press(sge.s.escape, "")
+            self.current_room.terminate_game()
         else:
             save_game()
             self.end()
@@ -381,6 +381,7 @@ class Arena(Room):
         self.callback = None
         self.test_num = 0
         self.tangoject_started = False
+        self.player_ran = False
 
         layers = []
         d = os.path.join(DATA, "images", "arenas")
@@ -614,6 +615,7 @@ class Arena(Room):
         self.player_object.xvelocity = -5
         self.notification_text = _("{tangomon} is running away!").format(
             tangomon=self.player_name)
+        self.player_ran = True
 
     def enemy_run(self):
         self.reset_state()
@@ -633,10 +635,28 @@ class Arena(Room):
 
         load_map()
 
+    def terminate_game(self):
+        if not self.player_ran:
+            assert len(player_tangomon) > self.player
+            text = _("WARNING: If you leave this battle, you will lose your current tangomon! Are you sure?")
+            buttons = [_("No"), _("Yes")]
+            if xsge_gui.show_message(gui_handler, message=text, buttons=buttons):
+                self.reset_state()
+                self.player_ran = True
+                del player_tangomon[self.player]
+                self.end_battle()
+                save_game()
+                sge.game.end()
+        else:
+            self.end_battle()
+            save_game()
+            sge.game.end()
+
     def event_key_press(self, key, char):
         if key in {sge.s.enter, sge.s.kp_enter}:
             self.evaluate_tangoji()
-        elif key == sge.s.escape:
+        elif key == sge.s.escape and not self.player_ran:
+            assert len(player_tangomon) > self.player
             text = _("WARNING: If you leave this battle, you will lose your current tangomon! Are you sure?")
             buttons = [_("No"), _("Yes")]
             if xsge_gui.show_message(gui_handler, message=text, buttons=buttons):
