@@ -29,6 +29,7 @@ import json
 import math
 import os
 import random
+import shutil
 import time
 import warnings
 import webbrowser
@@ -102,6 +103,10 @@ BG_HEIGHT = 320
 FPS = 60
 DELTA_MIN = FPS / 20
 DELTA_MAX = FPS * 4
+
+CONFIG_PATH = os.path.join(CONFIG, "config.json")
+SAVE_SLOTS_PATH = os.path.join(CONFIG, "save_slots.json")
+SAVE_SLOTS_BACKUP_PATH = os.path.join(CONFIG, "save_slots.json~")
 
 KEY_REPEAT_INTERVAL = 20
 KEY_REPEAT_DELAY = 400
@@ -1621,11 +1626,19 @@ def write_to_disk():
                "sound_enabled": sound_enabled, "music_enabled": music_enabled,
                "fps_enabled": fps_enabled}
 
-        with open(os.path.join(CONFIG, "config.json"), 'w') as f:
+        with open(CONFIG_PATH, 'w') as f:
             json.dump(cfg, f, indent=4)
 
-        with open(os.path.join(CONFIG, "save_slots.json"), 'w') as f:
+        if os.path.exists(SAVE_SLOTS_PATH):
+            if os.path.exists(SAVE_SLOTS_BACKUP_PATH):
+                os.remove(SAVE_SLOTS_BACKUP_PATH)
+            shutil.copy(SAVE_SLOTS_PATH, SAVE_SLOTS_BACKUP_PATH)
+
+        with open(SAVE_SLOTS_PATH, 'w') as f:
             json.dump(save_slots, f, indent=4)
+
+        if os.path.exists(SAVE_SLOTS_BACKUP_PATH):
+            os.remove(SAVE_SLOTS_BACKUP_PATH)
 
 
 print(_("Initializing game system..."))
@@ -1692,7 +1705,7 @@ if not os.path.exists(CONFIG):
     os.makedirs(CONFIG)
 
 try:
-    with open(os.path.join(CONFIG, "config.json")) as f:
+    with open(CONFIG_PATH) as f:
         cfg = json.load(f)
 except (IOError, OSError, ValueError):
     cfg = {}
@@ -1711,8 +1724,13 @@ finally:
 
     create_fonts()
 
+if os.path.exists(SAVE_SLOTS_BACKUP_PATH):
+    if os.path.exists(SAVE_SLOTS_PATH):
+        os.remove(SAVE_SLOTS_PATH)
+    os.rename(SAVE_SLOTS_BACKUP_PATH, SAVE_SLOTS_PATH)
+
 try:
-    with open(os.path.join(CONFIG, "save_slots.json")) as f:
+    with open(SAVE_SLOTS_PATH) as f:
         loaded_slots = json.load(f)
 except (IOError, OSError, ValueError):
     pass
