@@ -145,7 +145,7 @@ TEST_WAIT = FPS / 2
 TEST_LIMIT = 5
 ATTACK_INTERVAL_TIME = 4 * FPS
 ATTACK_INTERVAL_FAIL_TIME = 8 * FPS
-TANGOJI_ENTRY_TIME = 30 * FPS
+TANGOJI_ENTRY_TIME = 10 * FPS
 TANGOJI_MULT_START = 1.0
 TANGOJI_MULT_DECREMENT = 0.025
 TANGOJI_MULT_MIN = 0.25
@@ -497,11 +497,11 @@ class Arena(Room):
                 bulk_bonus = TANGOJI_MULT_BULK_BONUS * len(player_tangojis)
                 self.tangoji_bonus += bulk_bonus
 
-                if ("time_limit" in self.alarms and
-                        self.alarms["time_limit"] > 0):
-                    self.tangoji_bonus += (self.alarms["time_limit"] *
+                if ("time_bonus" in self.alarms and
+                        self.alarms["time_bonus"] > 0):
+                    self.tangoji_bonus += (self.alarms["time_bonus"] *
                                            TANGOJI_MULT_TIME_BONUS)
-                    del self.alarms["time_limit"]
+                    del self.alarms["time_bonus"]
             else:
                 self.tangoji["power"] += TANGOJI_MULT_DECREMENT
                 self.tangoji["power"] = min(self.tangoji["power"],
@@ -670,12 +670,10 @@ class Arena(Room):
                 self.event_alarm("player_lose")
 
     def event_alarm(self, alarm_id):
-        if alarm_id == "time_limit":
-            self.evaluate_tangoji()
-        elif alarm_id == "init_tangoject":
+        if alarm_id == "init_tangoject":
             self.show_clue()
             self.callback = self.tangoject
-            self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+            self.alarms["time_bonus"] = TANGOJI_ENTRY_TIME
 
             if not self.tangoject_started:
                 play_sound(start_tangoject_sound)
@@ -685,7 +683,7 @@ class Arena(Room):
             self.choose_tangoji()
             self.show_clue()
             self.callback = self.player_attack
-            self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+            self.alarms["time_bonus"] = TANGOJI_ENTRY_TIME
             play_sound(charge_sound)
         elif alarm_id == "player_lose":
             self.player_run()
@@ -700,7 +698,7 @@ class Arena(Room):
                 self.tangoji = player_tangokans.pop(i)
                 self.show_clue()
                 self.callback = self.use_tangokan
-                self.alarms["time_limit"] = TANGOJI_ENTRY_TIME
+                self.alarms["time_bonus"] = TANGOJI_ENTRY_TIME
                 play_sound(engage_tangokan_sound)
             else:
                 self.enemy_run()
