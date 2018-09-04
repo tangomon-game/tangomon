@@ -549,6 +549,7 @@ class Arena(Room):
         self.reset_state()
 
         word = self.tangoji.get("word", "")
+        info = self.tangoji.get("info")
         if self.tangoji_bonus:
             damage = int(self.player_base_power * self.tangoji_bonus)
 
@@ -575,8 +576,13 @@ class Arena(Room):
             interval = ATTACK_INTERVAL_FAIL_TIME
             play_sound(block_sound)
             play_sound(hurt_sound)
-            self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
-                tangoji=word, enemy=self.enemy_name, damage=damage)
+            
+            if info:
+                self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\" (\"{info}\")) not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
+                    tangoji=word, info=info, enemy=self.enemy_name, damage=damage)
+            else:
+                self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
+                    tangoji=word, enemy=self.enemy_name, damage=damage)
 
         if self.enemy_hp <= 0:
             self.alarms["player_win"] = interval
@@ -987,7 +993,7 @@ class OptionsMenu(Menu):
         else:
             play_sound(cancel_sound)
             write_to_disk()
-            MainMenu.create(default=3)
+            MainMenu.create(default=2)
 
 
 class ModalMenu(xsge_gui.MenuDialog):
@@ -1108,9 +1114,10 @@ class TangojiMenu(ModalMenu):
             i = self.current_tangoji[self.choice]
             word = player_tangojis[i].get("word", "???")
             clue = player_tangojis[i].get("clue", "???")
+            info = player_tangojis[i].get("info", _("N/A"))
             power = player_tangojis[i].get("power", TANGOJI_MULT_START)
-            text = _("{word}\n\n{clue}\n\nPower: {power}%").format(
-                word=word, clue=clue, power=int(power * 100))
+            text = _("{word}\n\n{clue}\n\nInfo: {info}\n\nPower: {power}%").format(
+                word=word, info=info, clue=clue, power=int(power * 100))
             DialogBox(gui_handler, text).show()
             self.create_page(default=self.choice, page=self.page)
         else:
@@ -1138,6 +1145,14 @@ class ChangeTangojiMenu(TangojiMenu):
             clue = player_tangojis[i].get("clue", "")
             tangoji_clue = xsge_gui.get_text_entry(gui_handler, message=text,
                                                    text=clue)
+
+            text = _("Enter your desired changes to this tangoji's extra information.")
+            info = player_tangojis[i].get("info", "")
+            tangoji_info = xsge_gui.get_text_entry(gui_handler, message=text,
+                                                   text=info)
+
+            if tangoji_info is not None:
+                player_tangojis[i]["info"] = tangoji_info
             if tangoji_clue:
                 player_tangojis[i]["clue"] = tangoji_clue
 
@@ -1425,7 +1440,10 @@ def add_player_tangoji():
         text = _("Enter the clue for your new tangoji.")
         tangoji_clue = xsge_gui.get_text_entry(gui_handler, message=text)
         if tangoji_clue:
-            player_tangojis.append({"word": tangoji_word, "clue": tangoji_clue})
+            text = _("Enter any extra information for your new tangoji (optional).")
+            tangoji_info = xsge_gui.get_text_entry(gui_handler, message=text)
+            player_tangojis.append({"word": tangoji_word, "clue": tangoji_clue,
+                                    "info": tangoji_info})
             return True
 
     return False

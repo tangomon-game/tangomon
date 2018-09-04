@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
-"POT-Creation-Date: 2018-08-10 19:42-0400\n"
+"POT-Creation-Date: 2018-09-04 01:47-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -117,7 +117,13 @@ msgstr ""
 # tangoji entry. {tangoji} is replaced with the tangoji the player was
 # supposed to enter, {enemy} is replaced with the name of the enemy
 # tangomon, and {damage} is replced with the damage inflicted by the
-# enemy's counterattack.
+# enemy's counterattack. The version used depends on whether there is
+# extra info for the tangoji; if there is, the first one is used, and
+# {info} is replaced with that info. Otherwise, the second one is used.
+msgid "Attack failed! Correct Tangoji (\"{tangoji}\" (\"{info}\")) not "
+"entered. {enemy} counterattacks, inflicting {damage} damage."
+msgstr ""
+
 msgid "Attack failed! Correct Tangoji (\"{tangoji}\") not entered. "
 "{enemy} counterattacks, inflicting {damage} damage."
 msgstr ""
@@ -170,11 +176,17 @@ msgstr ""
 msgid "This will only reset your location and tangomon. Are you sure?"
 msgstr ""
 
-# Tangoji information. {word} is replaced by the tangoji. {clue} is
+# Indicates that a piece of information is not applicable.
+msgid "N/A"
+msgstr ""
+
+# Tangoji information. {word} is replaced by the tangoji. {info} is
+# replaced by the tangoji's extra information, or "N/A" if there is no
+# extra information (see the entry above). {clue} is
 # replaced by the tangoji's clue. {power} is replaced by the tangoji's
 # current power rating, which is a percentage (100% means that the
 # tangoji utilizes 100% of the tangomon's power when used).
-msgid "{word}\n\n{clue}\n\nPower: {power}%"
+msgid ""{word}\n\n{clue}\n\nInfo: {info}\n\nPower: {power}%""
 msgstr ""
 
 # Default text used for the test textbox. Should ideally be a phrase that
@@ -365,13 +377,20 @@ msgstr ""
 msgid "Enter your desired changes to this tangoji's clue."
 msgstr ""
 
+# Dialog box asking the player to change the info for an existing tangoji.
+msgid "Enter your desired changes to this tangoji's extra information."
+msgstr ""
+
 # Dialog box asking the player to enter a new tangoji.
 msgid "Enter your new tangoji."
 msgstr ""
 
-# Dialog box asking the player to enter the clue for the previously
-# entered tangoji.
+# Dialog box asking the player to enter the clue for a new tangoji.
 msgid "Enter the clue for your new tangoji."
+msgstr ""
+
+# Dialog box asking the player to enter the info for a new tangoji.
+msgid "Enter any extra information for your new tangoji (optional)."
 msgstr ""
 
 # Dialog box asking for the player's name.
