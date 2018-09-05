@@ -1114,7 +1114,9 @@ class TangojiMenu(ModalMenu):
             i = self.current_tangoji[self.choice]
             word = player_tangojis[i].get("word", "???")
             clue = player_tangojis[i].get("clue", "???")
-            info = player_tangojis[i].get("info", _("N/A"))
+            info = player_tangojis[i].get("info")
+            if not info:
+                info = _("N/A")
             power = player_tangojis[i].get("power", TANGOJI_MULT_START)
             text = _("{word}\n\n{clue}\n\nInfo: {info}\n\nPower: {power}%").format(
                 word=word, info=info, clue=clue, power=int(power * 100))
