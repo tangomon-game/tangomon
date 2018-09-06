@@ -57,12 +57,12 @@ effectiveness over time as you successfully use them, so it is in your
 best interest to learn new tangojis as much as possible. This is also
 ideal from a learning perspective.
 
-Tangomon are the creatures which battle using tangojis. You can find
-them by exploring the map, but not while you are on a road or other safe
-area. There are three types of areas with different sets of tangomon:
-grassland, forest, and dungeon. Different locations have different
-selections of tangomon; in general, the further you go, the stronger
-they become.
+Tangomon are the creatures which battle using tangojis. You can battle
+a tangomon by entering any of the areas shown in the area selection
+screen; do this by pressing the Enter key. Below each area, you will
+find an indication of how many types of tangomon exist in that area, and
+how many of those types you have. Areas further to the right are home to
+stronger and stronger tangomon, so do keep that in mind!
 
 During a battle, you will be shown the clues to tangojis randomly
 selected from your tangoji list. Type the tangoji corresponding with the
