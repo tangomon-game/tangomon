@@ -578,7 +578,7 @@ class Arena(Room):
             play_sound(hurt_sound)
             
             if info:
-                self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\" (\"{info}\")) not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
+                self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\" ({info})) not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
                     tangoji=word, info=info, enemy=self.enemy_name, damage=damage)
             else:
                 self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\") not entered. {enemy} counterattacks, inflicting {damage} damage.").format(

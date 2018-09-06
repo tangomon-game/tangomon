@@ -21,7 +21,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: 2.0\n"
 "Report-Msgid-Bugs-To: http://tangomon.nongnu.org\n"
-"POT-Creation-Date: 2018-09-04 01:47-0400\n"
+"POT-Creation-Date: 2018-09-06 01:12-0400\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -120,7 +120,7 @@ msgstr ""
 # enemy's counterattack. The version used depends on whether there is
 # extra info for the tangoji; if there is, the first one is used, and
 # {info} is replaced with that info. Otherwise, the second one is used.
-msgid "Attack failed! Correct Tangoji (\"{tangoji}\" (\"{info}\")) not "
+msgid "Attack failed! Correct Tangoji (\"{tangoji}\" ({info})) not "
 "entered. {enemy} counterattacks, inflicting {damage} damage."
 msgstr ""
 
