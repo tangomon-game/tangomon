@@ -138,7 +138,6 @@ BASE_POWER_START = 75
 HEALTH_INCREMENT_FACTOR = 1.025
 BASE_POWER_INCREMENT_FACTOR = 1.025
 ZONE_BUFFER = 3
-NEW_TANGOMON_REDUNDANCY = 3
 
 BATTLE_START_WAIT = 2 * FPS
 TEST_WAIT = FPS / 2
@@ -352,13 +351,15 @@ class Worldmap(Room):
             tset = tangomon_sets[zone]
 
             choices = list(tset)
+            new_choices = []
             for tangomon in tset:
                 if tangomon not in player_tangomon:
-                    # Not caught, so we give it a couple redundant
-                    # entries to make encountering it more likely.
-                    for i in six.moves.range(NEW_TANGOMON_REDUNDANCY):
-                        choices.append(tangomon)
-            tangomon = random.choice(choices)
+                    new_choices.append(tangomon)
+
+            if new_choices and get_player_active_tangokans():
+               tangomon = random.choice(new_choices)
+            else:
+               tangomon = random.choice(choices)
 
             ect = tangomon_encountered[zone]
             music = "battle.ogg"
