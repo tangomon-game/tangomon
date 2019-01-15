@@ -56,6 +56,20 @@ msgstr ""
 msgid "Where to store save data in (Default: \"{}\")"
 msgstr ""
 
+# Explanation for the "-o" command-line option
+msgid ""
+"Offline play for the indicated slot (slot numbers go from 0 to 4, where "
+"0 is the first slot). A list of all tangoji, tangokans, and tests you "
+"need to study will be printed to \"tangomon-offline.txt\". When "
+"finished, you can turn in your results with the \"--results\" option."
+msgstr ""
+
+# Explanation for the "-r" command-line option
+msgid ""
+"Use alongside the \"--offline\" option to submit your results for "
+"offline play."
+msgstr ""
+
 
 # Zone names
 msgid "Grassland"

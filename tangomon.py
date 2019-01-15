@@ -71,14 +71,26 @@ parser.add_argument(
 parser.add_argument(
     "-c", "--configdir",
     help=_('Where to store save data in (Default: "{}")').format(CONFIG))
+parser.add_argument(
+    "-o", "--offline", type=int,
+    help=_('Offline play for the indicated slot (slot numbers go from 1 to 5, where 1 is the first slot). A list of all tangoji, tangokans, and tests you need to study will be printed to "tangomon-offline.txt". When finished, you can turn in your results with the "--results" option.'))
+parser.add_argument(
+    "-r", "--results",
+    help=_("Use alongside the \"--offline\" option to submit your results for offline play."),
+    action="store_true")
 args = parser.parse_args()
 
 NOSAVE = args.nosave
 DELTA = not args.nodelta
+OFFLINE_RESULTS = args.results
 if args.datadir:
     DATA = args.datadir
 if args.configdir:
     CONFIG = args.configdir
+if args.offline:
+    OFFLINE_SLOT = args.offline
+else:
+    OFFLINE_SLOT = None
 
 if six.PY2:
     gettext.install(
@@ -275,7 +287,7 @@ class Worldmap(Room):
     """
     Selection screen for the different zones.
     """
-    
+
     zone_w = 240
     zone_h = 240
 
@@ -577,7 +589,7 @@ class Arena(Room):
             interval = ATTACK_INTERVAL_FAIL_TIME
             play_sound(block_sound)
             play_sound(hurt_sound)
-            
+
             if info:
                 self.notification_text = _("Attack failed! Correct Tangoji (\"{tangoji}\" ({info})) not entered. {enemy} counterattacks, inflicting {damage} damage.").format(
                     tangoji=word, info=info, enemy=self.enemy_name, damage=damage)
@@ -802,7 +814,7 @@ class FontChooser(xsge_gui.Dialog):
         text = _("Change Font")
         change_font_button = xsge_gui.Button(self, padding, y, 3, text,
                                              width=(self.width - 2 * padding))
-        
+
         h = xsge_gui.textbox_sprite.height
         y = change_font_button.y - h - padding
         font_textbox = xsge_gui.TextBox(
@@ -901,6 +913,7 @@ class NewGameMenu(Menu):
             current_save_slot = self.choice
             if save_slots[current_save_slot] is None:
                 new_game()
+                load_map()
             else:
                 OverwriteConfirmMenu.create(default=1)
         else:
@@ -916,6 +929,7 @@ class OverwriteConfirmMenu(Menu):
         if self.choice == 0:
             play_sound(confirm_sound)
             new_game()
+            load_map()
         else:
             play_sound(cancel_sound)
             NewGameMenu.create(default=current_save_slot)
@@ -929,7 +943,9 @@ class LoadGameMenu(NewGameMenu):
         if self.choice in six.moves.range(len(save_slots)):
             play_sound(confirm_sound)
             current_save_slot = self.choice
-            load_game()
+            if not load_game():
+                new_game()
+            load_map()
         else:
             play_sound(cancel_sound)
             MainMenu.create(default=1)
@@ -1337,17 +1353,6 @@ def make_tangokan(tangoji):
     player_tangokans.append(tangokan)
 
 
-def schedule_tangojection(tangokan):
-    global player_tangojections
-
-    for st in TANGOJECT_TIMES:
-        tangojection = tangokan.copy()
-        tangojection["time"] = time.time() + st
-        player_tangojections.append(tangojection)
-
-    player_tangojections.sort(key=lambda d: d["time"])
-
-
 def get_tangomon_sprite(tangomon):
     for i in tangomon_sets:
         if tangomon in tangomon_sets[i]:
@@ -1548,7 +1553,6 @@ def new_game():
     tangomon_encountered = {}
     for i in ZONES:
         tangomon_encountered[i] = []
-    load_map()
 
 
 def save_game():
@@ -1609,10 +1613,10 @@ def load_game():
 
                 for i in reversed(ilist[1:]):
                     del player_tangojections[i]
-
-        load_map()
     else:
-        new_game()
+        return False
+
+    return True
 
 
 def load_map():
@@ -1656,88 +1660,29 @@ def write_to_disk():
             os.remove(SAVE_SLOTS_BACKUP_PATH)
 
 
-print(_("Initializing game system..."))
-Game(SCREEN_SIZE[0], SCREEN_SIZE[1], fps=FPS, delta=DELTA, delta_min=DELTA_MIN,
-     delta_max=DELTA_MAX, window_text="Tangomon {}".format(__version__),
-     window_icon=os.path.join(DATA, "images", "misc", "icon.png"))
-
-sge.keyboard.set_repeat(interval=KEY_REPEAT_INTERVAL, delay=KEY_REPEAT_DELAY)
-
-print(_("Initializing GUI system..."))
-xsge_gui.init()
-xsge_gui.next_widget_keys = [sge.s.tab, sge.s.down]
-xsge_gui.previous_widget_keys = [sge.s.up]
-xsge_gui.window_background_color = sge.gfx.Color("black")
-xsge_gui.keyboard_focused_box_color = sge.gfx.Color("white")
-xsge_gui.text_color = sge.gfx.Color("white")
-gui_handler = xsge_gui.Handler()
-
-menu_color = sge.gfx.Color("black")
-
-print(_("Loading media..."))
-
-# Load sprites
-d = os.path.join(DATA, "images", "misc")
-logo_sprite = sge.gfx.Sprite("logo", d, origin_x=300)
-
-# Find tangomon
-for zone in ZONES:
-    tangomon_sets[zone] = set()
-    d = os.path.join(DATA, "images", "tangomon", zone)
-    for fname in os.listdir(d):
-        root, ext = os.path.splitext(fname)
-        try:
-            sprite = sge.gfx.Sprite(root, d)
-        except (IOError, OSError):
-            pass
+# Get an integer in the range [x,y] from the user through the terminal.
+# If can_cancel, user may enter nothing instead.  Returns number entered
+# or None if no entry.
+def input_int(x=None, y=None, can_cancel=False):
+    while True:
+        s = six.moves.input("> ")
+        if s:
+            try:
+                i = int(s)
+            except ValueError:
+                print(_("Invalid entry: must be an integer."))
+            else:
+                if (x is None or i >= x) and (y is None or i <= y):
+                    return i
+                else:
+                    print(_("Invalid entry: must be between {} and {}.").format(
+                        x, y))
         else:
-            tangomon_sets[zone].add(root)
+            return None
 
-# Create fonts
-create_fonts()
-
-# Load sounds
-charge_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "charge.wav"))
-hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
-block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
-critical_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "critical.wav"))
-engage_tangokan_sound = sge.snd.Sound(os.path.join(
-    DATA, "sounds", "engage_tangokan.wav"), volume=0.8)
-start_tangoject_sound = sge.snd.Sound(os.path.join(
-    DATA, "sounds", "start_tangoject.wav"))
-pass_test_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "pass_test.wav"))
-fail_test_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "fail_test.wav"))
-
-select_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "select.ogg"))
-confirm_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "confirm.wav"))
-cancel_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "cancel.wav"))
-type_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "type.wav"))
-
-# Create rooms
-sge.game.start_room = TitleScreen()
 
 if not os.path.exists(CONFIG):
     os.makedirs(CONFIG)
-
-try:
-    with open(CONFIG_PATH) as f:
-        cfg = json.load(f)
-except (IOError, OSError, ValueError):
-    cfg = {}
-finally:
-    cfg_version = cfg.get("version", 0)
-    first_run = cfg.get("first_run", True)
-
-    font_name = cfg.get("font_name", font_name)
-    fullscreen = cfg.get("fullscreen", fullscreen)
-    sge.game.fullscreen = fullscreen
-    scale_method = cfg.get("scale_method", scale_method)
-    sge.game.scale_method = scale_method
-    sound_enabled = cfg.get("sound_enabled", sound_enabled)
-    music_enabled = cfg.get("music_enabled", music_enabled)
-    fps_enabled = cfg.get("fps_enabled", fps_enabled)
-
-    create_fonts()
 
 if os.path.exists(SAVE_SLOTS_BACKUP_PATH):
     if os.path.exists(SAVE_SLOTS_PATH):
@@ -1753,10 +1698,257 @@ else:
     for i in six.moves.range(min(len(loaded_slots), len(save_slots))):
         save_slots[i] = loaded_slots[i]
 
+try:
+    with open(CONFIG_PATH) as f:
+        cfg = json.load(f)
+except (IOError, OSError, ValueError):
+    cfg = {}
+finally:
+    cfg_version = cfg.get("version", 0)
+    first_run = cfg.get("first_run", True)
 
-if __name__ == "__main__":
-    print(_("Starting game..."))
-    try:
-        sge.game.start()
-    finally:
-        save_game()
+    font_name = cfg.get("font_name", font_name)
+    fullscreen = cfg.get("fullscreen", fullscreen)
+    scale_method = cfg.get("scale_method", scale_method)
+    sound_enabled = cfg.get("sound_enabled", sound_enabled)
+    music_enabled = cfg.get("music_enabled", music_enabled)
+    fps_enabled = cfg.get("fps_enabled", fps_enabled)
+
+
+if __name__ == "__main__" and OFFLINE_SLOT is not None:
+    # Offline play
+    if 1 <= OFFLINE_SLOT <= len(save_slots) and save_slots[OFFLINE_SLOT - 1]:
+        current_save_slot = OFFLINE_SLOT - 1
+        load_game()
+        player_tangojections.sort(key=lambda d: d.get("time"))
+
+        if OFFLINE_RESULTS:
+            print("Please enter the time code for your offline session.")
+            time_code = input_int()
+
+            print(_("Enter the ID number for each of your FAILED tests. When finished, leave blank and press Enter."))
+            failed = []
+            while True:
+                i = input_int(0, len(player_tangojections) - 1, True)
+                if i is not None:
+                    failed.append(i)
+                else:
+                    break
+
+            tangojections = []
+            while (player_tangojections and
+                   player_tangojections[0].get("time", time_code) <= time_code):
+                tangojections.append(player_tangojections.pop(0))
+
+            failed.sort(reverse=True)
+            for i in failed:
+                tangoji = tangojections.pop(i)
+                tangoji["power"] = TANGOJI_MULT_START
+                player_tangojis.append(tangoji)
+
+            for tangoji in tangojections:
+                nt = tangoji.setdefault("next_time", DAY)
+                dev = random.uniform(-nt / 10, nt / 10)
+                tangoji["time"] = time_code + nt + dev
+                tangoji["next_time"] *= 2
+                player_tangojections.append(tangoji)
+
+            player_tangojections.sort(key=lambda d: d.get("time"))
+
+            print(_("Enter the ID number for each of your FAILED tangokans. When finished, leave blank and press Enter."))
+            failed = []
+            while True:
+                i = input_int(0, len(player_tangokans), True)
+                if i is not None:
+                    failed.append(i)
+                else:
+                    break
+
+            failed.sort(reverse=True)
+            for i in failed:
+                tangoji = player_tangokans.pop(i)
+                tangoji["power"] = TANGOJI_MULT_START
+                player_tangojis.append(tangoji)
+
+            active_tangokans = []
+            for i in six.moves.range(len(player_tangokans)):
+                tangokan = player_tangokans[i]
+                tangokan.setdefault("active_time", time_code + TANGOKAN_WAIT_TIME)
+                if time_code >= tangokan["active_time"]:
+                    active_tangokans.append(i)
+
+            for i in sorted(active_tangokans, reverse=True):
+                tangoji = player_tangokans.pop(i)
+                wait = DAY
+                tangoji["time"] = time_code + wait
+                tangoji["next_time"] = wait * 2
+                player_tangojections.append(tangoji)
+
+            save_game()
+            print(_("Offline session results stored. Thank you."))
+        else:
+            template = _("TANGOMON OFFLINE ({name})\n\nTime code: {time_code}\n\nTests:\n{tangojections}\n\nTangojis:\n{tangojis}\n\nTangokans:\n{tangokans}")
+            ans_template = _("TANGOMON OFFLINE ANSWERS ({name})\n\nTime code: {time_code}\n\nTests:\n{tangojections}\n\nTangojis:\n{tangojis}\n\nTangokans:\n{tangokans}")
+            list_template = "* {}: {}"
+            tangoji_info_template = _("{tangoji} ({info})")
+            time_code = int(time.time())
+
+            tangojections = []
+            tangojections_ans = []
+            for i in six.moves.range(len(player_tangojections)):
+                if player_tangojections[i].get("time", time_code) <= time_code:
+                    tangoji = player_tangojections[i]
+                    tangojections.append(list_template.format(
+                        i, tangoji["clue"]))
+
+                    if tangoji.setdefault("info"):
+                        tangojections_ans.append(list_template.format(
+                            i, tangoji_info_template.format(
+                                tangoji=tangoji["word"],
+                                info=tangoji["info"])))
+                    else:
+                        tangojections_ans.append(list_template.format(
+                            i, tangoji=tangoji["word"]))
+                else:
+                    break
+
+            tangojis = []
+            tangojis_ans = []
+            for i in six.moves.range(len(player_tangojis)):
+                tangoji = player_tangojis[i]
+                tangojis.append(
+                    list_template.format(i, tangoji["clue"]))
+
+                if tangoji.setdefault("info"):
+                    tangojis_ans.append(list_template.format(
+                        i, tangoji_info_template.format(
+                            tangoji=tangoji["word"], info=tangoji["info"])))
+                else:
+                    tangojis_ans.append(list_template.format(
+                        i, tangoji=tangoji["word"]))
+
+
+            tangokans = []
+            tangokans_ans = []
+            for i in six.moves.range(len(player_tangokans)):
+                tangokan = player_tangokans[i]
+                tangokan.setdefault("active_time",
+                                    time_code + TANGOKAN_WAIT_TIME)
+                if time_code >= tangokan["active_time"]:
+                    tangokans.append(
+                        list_template.format(i, player_tangokans[i]["clue"]))
+
+                    if tangokan.setdefault("info"):
+                        tangokans_ans.append(list_template.format(
+                            i, tangoji_info_template.format(
+                                tangoji=tangokan["word"],
+                                info=tangokan["info"])))
+                    else:
+                        tangokans_ans.append(list_template.format(
+                            i, tangoji=tangokan["word"]))
+
+            stangojections = "\n".join(tangojections)
+            stangojis = "\n".join(tangojis)
+            stangokans = "\n".join(tangokans)
+
+            s = template.format(
+                name=player_name, time_code=time_code,
+                tangojections=stangojections, tangojis=stangojis,
+                tangokans=stangokans)
+
+            with open("tangomon-offline.txt", 'w', encoding="utf-8") as f:
+                f.write(s)
+
+            print(_("Offline session written to tangomon-offline.txt."))
+
+            stangojections = "\n".join(tangojections_ans)
+            stangojis = "\n".join(tangojis_ans)
+            stangokans = "\n".join(tangokans_ans)
+
+            s = ans_template.format(
+                name=player_name, time_code=time_code,
+                tangojections=stangojections, tangojis=stangojis,
+                tangokans=stangokans)
+
+            with open("tangomon-offline-answers.txt", 'w', encoding="utf-8") as f:
+                f.write(s)
+
+            print(_("Answer key written to tangomon-offline-answers.txt."))
+else:
+    # Regular play
+    print(_("Initializing game system..."))
+    Game(SCREEN_SIZE[0], SCREEN_SIZE[1], fps=FPS, delta=DELTA,
+         delta_min=DELTA_MIN, delta_max=DELTA_MAX,
+         window_text="Tangomon {}".format(__version__),
+         window_icon=os.path.join(DATA, "images", "misc", "icon.png"))
+
+    sge.keyboard.set_repeat(interval=KEY_REPEAT_INTERVAL,
+                            delay=KEY_REPEAT_DELAY)
+
+    print(_("Initializing GUI system..."))
+    xsge_gui.init()
+    xsge_gui.next_widget_keys = [sge.s.tab, sge.s.down]
+    xsge_gui.previous_widget_keys = [sge.s.up]
+    xsge_gui.window_background_color = sge.gfx.Color("black")
+    xsge_gui.keyboard_focused_box_color = sge.gfx.Color("white")
+    xsge_gui.text_color = sge.gfx.Color("white")
+    gui_handler = xsge_gui.Handler()
+
+    menu_color = sge.gfx.Color("black")
+
+    print(_("Loading media..."))
+
+    # Load sprites
+    d = os.path.join(DATA, "images", "misc")
+    logo_sprite = sge.gfx.Sprite("logo", d, origin_x=300)
+
+    # Find tangomon
+    for zone in ZONES:
+        tangomon_sets[zone] = set()
+        d = os.path.join(DATA, "images", "tangomon", zone)
+        for fname in os.listdir(d):
+            root, ext = os.path.splitext(fname)
+            try:
+                sprite = sge.gfx.Sprite(root, d)
+            except (IOError, OSError):
+                pass
+            else:
+                tangomon_sets[zone].add(root)
+
+    # Create fonts
+    create_fonts()
+
+    # Load sounds
+    charge_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "charge.wav"))
+    hurt_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "hurt.wav"))
+    block_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "block.wav"))
+    critical_sound = sge.snd.Sound(os.path.join(
+        DATA, "sounds", "critical.wav"))
+    engage_tangokan_sound = sge.snd.Sound(os.path.join(
+        DATA, "sounds", "engage_tangokan.wav"), volume=0.8)
+    start_tangoject_sound = sge.snd.Sound(os.path.join(
+        DATA, "sounds", "start_tangoject.wav"))
+    pass_test_sound = sge.snd.Sound(os.path.join(
+        DATA, "sounds", "pass_test.wav"))
+    fail_test_sound = sge.snd.Sound(os.path.join(
+        DATA, "sounds", "fail_test.wav"))
+
+    select_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "select.ogg"))
+    confirm_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "confirm.wav"))
+    cancel_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "cancel.wav"))
+    type_sound = sge.snd.Sound(os.path.join(DATA, "sounds", "type.wav"))
+
+    # Create rooms
+    sge.game.start_room = TitleScreen()
+
+    # Settings
+    sge.game.fullscreen = fullscreen
+    sge.game.scale_method = scale_method
+
+    if __name__ == "__main__":
+        print(_("Starting game..."))
+        try:
+            sge.game.start()
+        finally:
+            save_game()
+
