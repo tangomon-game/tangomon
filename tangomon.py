@@ -1808,7 +1808,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
                                 info=tangoji["info"])))
                     else:
                         tangojections_ans.append(list_template.format(
-                            i, tangoji=tangoji["word"]))
+                            i, tangoji["word"]))
                 else:
                     break
 
@@ -1825,7 +1825,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
                             tangoji=tangoji["word"], info=tangoji["info"])))
                 else:
                     tangojis_ans.append(list_template.format(
-                        i, tangoji=tangoji["word"]))
+                        i, tangoji["word"]))
 
 
             tangokans = []
@@ -1845,7 +1845,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
                                 info=tangokan["info"])))
                     else:
                         tangokans_ans.append(list_template.format(
-                            i, tangoji=tangokan["word"]))
+                            i, tangokan["word"]))
 
             stangojections = "\n".join(tangojections)
             stangojis = "\n".join(tangojis)
