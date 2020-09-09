@@ -202,6 +202,11 @@ class Game(sge.dsp.Game):
                               color=sge.gfx.Color("yellow"), halign="right",
                               valign="bottom")
 
+    def event_key_press(self, key, char):
+        if key == "f9":
+            sge.gfx.Sprite.from_screenshot().save("screenshot-{}.png".format(
+                time.time()))
+
     def event_mouse_button_press(self, button):
         if button == "middle":
             self.event_close()
@@ -1135,19 +1140,19 @@ class ChangeTangojiMenu(TangojiMenu):
             play_sound(confirm_sound)
             i = self.current_tangoji[self.choice]
             text = _("Enter your desired changes to this tangoji.")
-            word = player_tangojis[i].get("word", "")
+            word = player_tangojis[i].get("word") or ""
             tangoji_word = xsge_gui.get_text_entry(gui_handler, message=text,
                                                    text=word)
             if tangoji_word:
                 player_tangojis[i]["word"] = tangoji_word
 
             text = _("Enter your desired changes to this tangoji's clue.")
-            clue = player_tangojis[i].get("clue", "")
+            clue = player_tangojis[i].get("clue") or ""
             tangoji_clue = xsge_gui.get_text_entry(gui_handler, message=text,
                                                    text=clue)
 
             text = _("Enter your desired changes to this tangoji's extra information.")
-            info = player_tangojis[i].get("info", "")
+            info = player_tangojis[i].get("info") or ""
             tangoji_info = xsge_gui.get_text_entry(gui_handler, message=text,
                                                    text=info)
 
@@ -1173,7 +1178,7 @@ class CreateTangokanMenu(TangojiMenu):
             i = self.current_tangoji[self.choice]
             tangoji = player_tangojis.pop(i)
             make_tangokan(tangoji)
-            msg = _("New tangokan created! It will activate in 2 hours. At that point, you will be able to use your tangokan to convince a new tangomon to join your team!")
+            msg = _("New tangokan created! It will activate in 12 hours. At that point, you will be able to use your tangokan to convince a new tangomon to join your team!")
             DialogBox(gui_handler, msg).show()
             WorldmapMenu.create(default=6)
         else:
