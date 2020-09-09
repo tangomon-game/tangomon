@@ -1,5 +1,4 @@
 pygame>=1.9.1
-sge-pygame>=1.4
-six>=1.4
-uniseg
+uniseg>=0.7
+sge>=1.7
 xsge_gui>=1.1

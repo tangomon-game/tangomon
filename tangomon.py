@@ -1,7 +1,5 @@
-#!/usr/bin/env python
+#!/usr/bin/env python3
 
-# Copyright (C) 2017-2018 Julie Marchant <onpon4@riseup.net>
-#
 # This program is free software: you can redistribute it and/or modify
 # it under the terms of the GNU General Public License as published by
 # the Free Software Foundation, either version 3 of the License, or
@@ -15,12 +13,9 @@
 # You should have received a copy of the GNU General Public License
 # along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-from __future__ import division
-from __future__ import absolute_import
-from __future__ import print_function
-from __future__ import unicode_literals
 
 __version__ = "2.0a0"
+
 
 import argparse
 import datetime
@@ -35,20 +30,14 @@ import warnings
 import webbrowser
 
 import sge
-import six
 import xsge_gui
 
 
 DATA = os.path.join(os.path.dirname(__file__), "data")
 CONFIG = os.path.join(os.path.expanduser("~"), ".config", "tangomon")
 
-if six.PY2:
-    gettext.install(
-        "tangomon", os.path.abspath(os.path.join(DATA, "locale")),
-        unicode=True)
-else:
-    gettext.install("tangomon",
-                    os.path.abspath(os.path.join(DATA, "locale")))
+gettext.install("tangomon",
+                os.path.abspath(os.path.join(DATA, "locale")))
 
 parser = argparse.ArgumentParser(prog="Tangomon")
 parser.add_argument(
@@ -92,22 +81,14 @@ if args.offline:
 else:
     OFFLINE_SLOT = None
 
-if six.PY2:
-    gettext.install(
-        "tangomon", os.path.abspath(os.path.join(DATA, "locale")),
-        unicode=True)
-else:
-    gettext.install("tangomon",
-                    os.path.abspath(os.path.join(DATA, "locale")))
+gettext.install("tangomon",
+                os.path.abspath(os.path.join(DATA, "locale")))
 
 if args.lang:
     lang = gettext.translation("tangomon",
                                os.path.abspath(os.path.join(DATA, "locale")),
                                [args.lang])
-    if six.PY2:
-        lang.install(unicode=True)
-    else:
-        lang.install()
+    lang.install()
 
 SCREEN_SIZE = [640, 480]
 BG_WIDTH = 640
@@ -181,7 +162,7 @@ scale_method = None
 sound_enabled = True
 music_enabled = True
 fps_enabled = False
-save_slots = [None for i in six.moves.range(SAVE_NSLOTS)]
+save_slots = [None for i in range(SAVE_NSLOTS)]
 
 font = None
 font_small = None
@@ -312,7 +293,7 @@ class Worldmap(Room):
                 new_sprite = sge.gfx.Sprite(
                     zone, d, width=zone_w, height=zone_h,
                     origin_x=(zone_w / 2), origin_y=(zone_h / 2))
-            except (IOError, OSError):
+            except OSError:
                 pass
             else:
                 new_sprite.draw_rectangle(
@@ -333,7 +314,7 @@ class Worldmap(Room):
         for zone in ZONES:
             tangomon_caught[zone] = len(unique_tangomon & tangomon_sets[zone])
 
-        for i in six.moves.range(len(self.zone_sprites)):
+        for i in range(len(self.zone_sprites)):
             zone = ZONES[i]
             zone_sprite = self.zone_sprites[i]
             self.project_sprite(zone_sprite, 0, x, y, 0)
@@ -406,7 +387,7 @@ class Arena(Room):
         try:
             s = sge.gfx.Sprite(
                 zone, d, width=BG_WIDTH, height=BG_HEIGHT)
-        except (IOError, OSError):
+        except OSError:
             pass
         else:
             x = (SCREEN_SIZE[0] - BG_WIDTH) / 2
@@ -834,7 +815,7 @@ class FontChooser(xsge_gui.Dialog):
         change_font_button.event_press = press_change_font
 
         h = y - xsge_gui.textbox_sprite.height - 3 * padding
-        text = _('If you will be using non-ASCII characters, please ensure that they display correctly by typing them into the test textbox above. If they do not, please specify a different font to use by entering its name in the textbox below and then clicking "Change Font". When you are finished, press "Done".\n\nFor English, some good font choices are Droid Sans and Arial.')
+        text = _('If you will be using non-ASCII characters, please ensure that they display correctly by typing them into the test textbox above. If they do not, please specify a different font to use by entering its name in the textbox below and then clicking "Change Font". When you are finished, press "Done".\n\nFor English, some good font choices are Roboto and Arial.')
         label = xsge_gui.Label(
             self, self.width / 2, 2 * padding + xsge_gui.textbox_sprite.height,
             1, text, width=(self.width - 2 * padding), height=h,
@@ -908,7 +889,7 @@ class NewGameMenu(Menu):
     def event_choose(self):
         global current_save_slot
 
-        if self.choice in six.moves.range(len(save_slots)):
+        if self.choice in range(len(save_slots)):
             play_sound(confirm_sound)
             current_save_slot = self.choice
             if save_slots[current_save_slot] is None:
@@ -940,7 +921,7 @@ class LoadGameMenu(NewGameMenu):
     def event_choose(self):
         global current_save_slot
 
-        if self.choice in six.moves.range(len(save_slots)):
+        if self.choice in range(len(save_slots)):
             play_sound(confirm_sound)
             current_save_slot = self.choice
             if not load_game():
@@ -1108,7 +1089,7 @@ class TangojiMenu(ModalMenu):
             page = int(page % n_pages)
             page_start = page * page_size
             page_end = min(page_start + page_size, len(player_tangojis))
-            current_page = six.moves.range(page_start, page_end)
+            current_page = range(page_start, page_end)
             cls.current_tangoji = []
             cls.items = []
             for i in current_page:
@@ -1336,7 +1317,7 @@ def get_player_unique_tangomon():
 
 def get_player_active_tangokans():
     active_tangokans = []
-    for i in six.moves.range(len(player_tangokans)):
+    for i in range(len(player_tangokans)):
         tangokan = player_tangokans[i]
         tangokan.setdefault("active_time", time.time() + TANGOKAN_WAIT_TIME)
         if time.time() >= tangokan["active_time"]:
@@ -1470,7 +1451,7 @@ def play_music(music, force_restart=False):
             try:
                 music_object = sge.snd.Music(os.path.join(DATA, "music",
                                                           music))
-            except (IOError, OSError):
+            except OSError:
                 sge.snd.Music.clear_queue()
                 sge.snd.Music.stop()
                 return
@@ -1484,7 +1465,7 @@ def play_music(music, force_restart=False):
             try:
                 music_start_object = sge.snd.Music(os.path.join(DATA, "music",
                                                                 music_start))
-            except (IOError, OSError):
+            except OSError:
                 pass
             else:
                 loaded_music[music_start] = music_start_object
@@ -1598,7 +1579,7 @@ def load_game():
             tjs = list(set([(d["word"], d["clue"]) for d in player_tangojections]))
             for word, clue in tjs:
                 ilist = []
-                for i in six.moves.range(len(player_tangojections)):
+                for i in range(len(player_tangojections)):
                     if (player_tangojections[i]["word"] == word and
                             player_tangojections[i]["clue"] == clue):
                         ilist.append(i)
@@ -1665,7 +1646,7 @@ def write_to_disk():
 # or None if no entry.
 def input_int(x=None, y=None, can_cancel=False):
     while True:
-        s = six.moves.input("> ")
+        s = input("> ")
         if s:
             try:
                 i = int(s)
@@ -1692,16 +1673,16 @@ if os.path.exists(SAVE_SLOTS_BACKUP_PATH):
 try:
     with open(SAVE_SLOTS_PATH) as f:
         loaded_slots = json.load(f)
-except (IOError, OSError, ValueError):
+except (OSError, ValueError):
     pass
 else:
-    for i in six.moves.range(min(len(loaded_slots), len(save_slots))):
+    for i in range(min(len(loaded_slots), len(save_slots))):
         save_slots[i] = loaded_slots[i]
 
 try:
     with open(CONFIG_PATH) as f:
         cfg = json.load(f)
-except (IOError, OSError, ValueError):
+except (OSError, ValueError):
     cfg = {}
 finally:
     cfg_version = cfg.get("version", 0)
@@ -1771,7 +1752,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
                 player_tangojis.append(tangoji)
 
             active_tangokans = []
-            for i in six.moves.range(len(player_tangokans)):
+            for i in range(len(player_tangokans)):
                 tangokan = player_tangokans[i]
                 tangokan.setdefault("active_time", time_code + TANGOKAN_WAIT_TIME)
                 if time_code >= tangokan["active_time"]:
@@ -1795,7 +1776,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
 
             tangojections = []
             tangojections_ans = []
-            for i in six.moves.range(len(player_tangojections)):
+            for i in range(len(player_tangojections)):
                 if player_tangojections[i].get("time", time_code) <= time_code:
                     tangoji = player_tangojections[i]
                     tangojections.append(list_template.format(
@@ -1814,7 +1795,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
 
             tangojis = []
             tangojis_ans = []
-            for i in six.moves.range(len(player_tangojis)):
+            for i in range(len(player_tangojis)):
                 tangoji = player_tangojis[i]
                 tangojis.append(
                     list_template.format(i, tangoji["clue"]))
@@ -1830,7 +1811,7 @@ if __name__ == "__main__" and OFFLINE_SLOT is not None:
 
             tangokans = []
             tangokans_ans = []
-            for i in six.moves.range(len(player_tangokans)):
+            for i in range(len(player_tangokans)):
                 tangokan = player_tangokans[i]
                 tangokan.setdefault("active_time",
                                     time_code + TANGOKAN_WAIT_TIME)
@@ -1910,7 +1891,7 @@ else:
             root, ext = os.path.splitext(fname)
             try:
                 sprite = sge.gfx.Sprite(root, d)
-            except (IOError, OSError):
+            except OSError:
                 pass
             else:
                 tangomon_sets[zone].add(root)
