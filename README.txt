@@ -97,6 +97,4 @@ in the menu.
 
 If, after entering fullscreen mode, the keyboard becomes unresponsive,
 you can exit the game by pressing the middle mouse button. This is a
-result of a rare bug in Pygame, explained in detail here:
-
-https://savannah.nongnu.org/forum/forum.php?forum_id=8113
+result of a rare bug in SDL 1.2.
