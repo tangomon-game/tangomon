@@ -584,8 +584,10 @@ class Arena(Room):
                     tangoji=word, enemy=self.enemy_name, damage=damage)
 
         if self.enemy_hp <= 0:
+            self.enemy_hp = 0
             self.alarms["player_win"] = interval
         elif self.player_hp <= 0:
+            self.player_hp = 0
             self.alarms["player_lose"] = interval
         else:
             self.alarms["init_player_attack"] = interval
