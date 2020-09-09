@@ -90,9 +90,9 @@ if args.lang:
                                [args.lang])
     lang.install()
 
-SCREEN_SIZE = [640, 480]
-BG_WIDTH = 640
-BG_HEIGHT = 320
+SCREEN_SIZE = [960, 540]
+BG_WIDTH = 960
+BG_HEIGHT = 352
 FPS = 60
 DELTA_MIN = FPS / 20
 DELTA_MAX = FPS * 4
@@ -1491,9 +1491,9 @@ def create_fonts():
     global font_small
     global font_big
 
-    font = sge.gfx.Font(font_name, size=16)
-    font_small = sge.gfx.Font(font_name, size=12)
-    font_big = sge.gfx.Font(font_name, size=20)
+    font = sge.gfx.Font(font_name, size=20)
+    font_small = sge.gfx.Font(font_name, size=16)
+    font_big = sge.gfx.Font(font_name, size=24)
 
     # Assign the fonts to xsge_gui
     xsge_gui.default_font = font
