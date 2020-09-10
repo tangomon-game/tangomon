@@ -202,11 +202,6 @@ class Game(sge.dsp.Game):
                               color=sge.gfx.Color("yellow"), halign="right",
                               valign="bottom")
 
-    def event_key_press(self, key, char):
-        if key == "f9":
-            sge.gfx.Sprite.from_screenshot().save("screenshot-{}.png".format(
-                time.time()))
-
     def event_mouse_button_press(self, button):
         if button == "middle":
             self.event_close()

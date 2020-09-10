@@ -20,6 +20,6 @@ if sys.platform == "win32":
 
 setup(name = "Tangomon",
       version = "2.0a0",
-      description = "Educational monster battling memorization name.",
+      description = "Educational monster battling memorization game.",
       options = {"build_exe": build_exe_options},
       executables = [Executable("tangomon.py", base=base, icon=icon)])
