@@ -33,6 +33,9 @@ import sge
 import xsge_gui
 
 
+if getattr(sys, "frozen", False):
+    __file__ = sys.executable
+
 DATA = os.path.join(os.path.dirname(__file__), "data")
 CONFIG = os.path.join(os.path.expanduser("~"), ".config", "tangomon")
 
