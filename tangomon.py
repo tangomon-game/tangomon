@@ -38,7 +38,9 @@ if getattr(sys, "frozen", False):
     __file__ = sys.executable
 
 DATA = os.path.join(os.path.dirname(__file__), "data")
-CONFIG = os.path.join(os.path.expanduser("~"), ".config", "tangomon")
+CONFIG = os.path.join(
+    os.getenv("XDG_CONFIG_HOME", os.path.join(os.path.expanduser("~"),
+                                              ".config")), "tangomon")
 
 gettext.install("tangomon",
                 os.path.abspath(os.path.join(DATA, "locale")))
