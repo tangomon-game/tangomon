@@ -42,8 +42,7 @@ CONFIG = os.path.join(
     os.getenv("XDG_CONFIG_HOME", os.path.join(os.path.expanduser("~"),
                                               ".config")), "tangomon")
 
-gettext.install("tangomon",
-                os.path.abspath(os.path.join(DATA, "locale")))
+gettext.install("tangomon", os.path.abspath(os.path.join(DATA, "locale")))
 
 parser = argparse.ArgumentParser(prog="Tangomon")
 parser.add_argument(
@@ -87,8 +86,7 @@ if args.offline:
 else:
     OFFLINE_SLOT = None
 
-gettext.install("tangomon",
-                os.path.abspath(os.path.join(DATA, "locale")))
+gettext.install("tangomon", os.path.abspath(os.path.join(DATA, "locale")))
 
 if args.lang:
     lang = gettext.translation("tangomon",
